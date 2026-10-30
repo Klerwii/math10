@@ -1,0 +1,2250 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is Math Biased? | AI vs Human Error Analyser</title>
+<meta name="description" content="An interactive MATH+AI Futures project: can the formula we choose decide whether AI or humans come out on top?">
+<meta property="og:title" content="Is Math Biased? AI vs Human Error Analyser">
+<meta property="og:description" content="Drag points, run experiments, and see how the same data can crown a different winner depending on the metric.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23eeecff'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='%236558d9' font-family='Arial'%3E%E2%88%91%3C/text%3E%3C/svg%3E">
+<style>
+:root {
+  --bg:#f5f6fa; --panel:#fff; --ink:#20243a; --muted:#70778b;
+  --line:#e4e7ef; --accent:#6558d9; --soft:#eeecff;
+  --green:#16845b; --red:#c24e55; --shadow:0 5px 24px #2222440b;
+  --human:#c2683f; --humansoft:#fbeee6;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+header{background:var(--panel);border-bottom:1px solid var(--line);
+  padding:20px max(20px,calc((100% - 1400px)/2))}
+.brand{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{width:43px;height:43px;border-radius:13px;background:var(--soft);
+  color:var(--accent);display:grid;place-items:center;font-size:23px}
+h1{font-size:21px;margin:0}h2{font-size:21px;margin:0 0 5px}
+h3{font-size:16px;margin:0 0 8px}
+p{margin:5px 0 12px}
+.sub,.muted{color:var(--muted)}
+.sub{font-size:13px}
+nav{display:flex;gap:7px;flex-wrap:wrap;margin-top:19px}
+nav button{border:0;background:transparent;color:var(--muted);
+  border-radius:9px;padding:10px 14px}
+nav button.active{background:var(--soft);color:var(--accent);font-weight:700}
+main{max-width:1400px;margin:auto;padding:24px 20px 60px}
+.page{display:none}.page.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);
+  border-radius:16px;padding:19px;box-shadow:var(--shadow);min-width:0}
+.span12{grid-column:span 12}.span8{grid-column:span 8}
+.span7{grid-column:span 7}.span6{grid-column:span 6}
+.span5{grid-column:span 5}.span4{grid-column:span 4}
+.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.metric{border:1px solid var(--line);border-radius:12px;padding:13px;min-width:0}
+.metric .name{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.metric .value{font-size:25px;font-weight:750;letter-spacing:-.6px;margin-top:5px}
+.metric .unit{font-size:11px;color:var(--muted)}
+.info{display:inline-grid;place-items:center;border:1px solid #d7d5f7;
+  background:var(--soft);color:var(--accent);border-radius:50%;
+  width:19px;height:19px;font-size:12px;font-weight:700;padding:0}
+.info:hover{filter:brightness(.95)}
+input,textarea,select{width:100%;border:1px solid var(--line);
+  border-radius:9px;padding:9px 10px;background:#fff;color:var(--ink)}
+textarea{min-height:100px;resize:vertical;font-family:ui-monospace,monospace;font-size:13px}
+label{font-size:13px;font-weight:650;display:block;margin-bottom:5px}
+.field{margin:12px 0}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row>*{flex:1}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);
+  padding:9px 13px;border-radius:9px}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn:hover{filter:brightness(.97)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.range{padding:0;accent-color:var(--accent)}
+canvas{width:100%;height:290px;display:block;touch-action:none}
+.chart-note{font-size:12px;color:var(--muted)}
+.tag{display:inline-block;border-radius:6px;padding:3px 8px;
+  background:var(--soft);color:var(--accent);font-size:11px;font-weight:700}
+.notice{padding:12px 14px;border-radius:10px;background:#f4f2ff;
+  border:1px solid #e4e0ff;margin-top:10px}
+.notice.good{background:#eef9f3;border-color:#d4efdf}
+.notice.warn{background:#fff6e9;border-color:#f5e1bd}
+#interpretations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.insight{border:1px solid var(--line);border-radius:12px;padding:14px}
+.insight h3{font-size:14px}
+.insight p{font-size:13px;margin:6px 0}
+details{border-top:1px solid var(--line);padding-top:9px;margin-top:9px}
+summary{cursor:pointer;color:var(--accent);font-weight:650;font-size:13px}
+.formula{background:#f7f7fb;padding:10px;border-radius:8px;
+  font-family:ui-monospace,monospace;font-size:13px;overflow-wrap:anywhere}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:right;border-bottom:1px solid var(--line);padding:9px 7px}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:650}
+.table-wrap{overflow-x:auto}
+.experiment-list{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+.experiment-list button.selected{background:var(--soft);color:var(--accent);
+  border-color:#c9c3ff}
+.option{display:flex;gap:9px;align-items:flex-start;border:1px solid var(--line);
+  padding:12px;border-radius:10px;margin:8px 0;cursor:pointer}
+.option input{width:auto;margin-top:5px}
+.option:has(input:checked){border-color:var(--accent);background:#f8f7ff}
+.answer{padding:13px;border-radius:10px;background:#eef9f3;margin-top:12px}
+.metric-guide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.metric-guide article{padding:15px;border:1px solid var(--line);border-radius:12px}
+.small{font-size:12px;color:var(--muted)}
+hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:25px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;margin-top:8px}
+.legend span{display:flex;align-items:center;gap:6px}
+.dot{width:11px;height:11px;border-radius:50%;display:inline-block}
+.metric .value small{color:var(--human);font-size:18px;font-weight:700}
+.metric .win{font-size:11px;font-weight:700;margin-top:4px}
+.win.ai{color:var(--accent)}.win.human{color:var(--human)}.win.tie{color:var(--muted)}
+.better{color:var(--green);font-weight:700}
+.linkish{border:0;background:none;padding:0;color:var(--accent);font:inherit;
+  font-weight:700;text-decoration:underline;cursor:pointer}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(11rem,1fr));gap:10px}
+.rcount{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rcount .metric{border:2px solid var(--line)}
+.rcount .metric.k1{border-color:var(--accent)}
+.rcount .metric.k2{border-color:var(--human)}
+.rcount .metric.k3{border-color:var(--green)}
+.valid{padding:12px 15px;border-radius:10px;margin-top:12px;font-size:13px}
+.valid.ok{background:#eef9f3;border:1px solid #d4efdf}
+.valid.bad{background:#fef2f2;border:1px solid #fecaca}
+.valid ul{margin:8px 0 0;padding-left:20px}
+.valid li{margin:3px 0}
+.dropzone{border:2px dashed #c9ccd2;border-radius:12px;padding:20px;text-align:center;
+  color:var(--muted);font-size:13px;cursor:pointer;background:#fcfcfd}
+.dropzone.over{border-color:var(--accent);background:#f4f2ff;color:var(--accent)}
+.acc{padding:9px 0;border-bottom:1px solid var(--line)}
+.acc:last-child{border-bottom:none}
+.acc .nm{font-weight:650;font-size:13px}
+.acc .bar{height:9px;background:#eceef2;border-radius:5px;overflow:hidden;margin-top:5px}
+.acc .bar i{display:block;height:100%;border-radius:5px}
+.acc .meta{font-size:12px;color:var(--muted);margin-top:3px;display:flex;justify-content:space-between}
+.pi{display:flex;gap:8px;flex-wrap:wrap;font-size:12px}
+.pi span{border:1px solid var(--line);border-radius:7px;padding:3px 8px}
+.pi span.hit{border-color:#c9e6d6;background:#eef9f3}
+.pi span.miss{border-color:#f4d3d5;background:#fef2f2}
+.pi span.blank{color:var(--muted)}
+.rHinweis{font-size:12px;color:var(--muted);margin-top:10px}
+.explainbox{margin-top:12px;padding:12px 14px;border-radius:10px;background:#f7f8fb;
+  border:1px solid var(--line);font-size:13px;line-height:1.6}
+.explainbox h4{margin:0 0 6px;font-size:13px}
+.explainbox p{margin:6px 0}
+.explainbox p:last-child{margin-bottom:0}
+.explainbox strong{font-weight:700}
+.fold{border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:16px;background:var(--panel)}
+.fold>summary{cursor:pointer;font-weight:700;font-size:16px;color:var(--accent)}
+.demo-flag{display:none;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;
+  margin-bottom:14px;background:#eef3ff;border:2px dashed #6558d9;color:#3b2fa8;font-size:13px;font-weight:650}
+.demo-flag.show{display:flex}
+.limits{display:grid;gap:10px}
+.limits div{padding:11px 14px;border-radius:10px;background:#f7f8fb;border:1px solid var(--line);font-size:13px}
+.limits strong{font-weight:700}
+.fold[open]>summary{margin-bottom:12px}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.sumcol{border:1px solid var(--line);border-radius:12px;padding:13px}
+.sumcol h4{margin:0 0 8px;font-size:13px;letter-spacing:.02em}
+.sumcol.ai h4{color:var(--accent)}
+.sumcol.hu h4{color:var(--human)}
+.sumrow{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;
+  border-bottom:1px dashed #eef0f5}
+.sumrow:last-child{border-bottom:none}
+.sumrow .k{color:var(--muted)}
+.sumrow .v{font-weight:700;font-variant-numeric:tabular-nums}
+.sumnote{font-size:12px;color:var(--muted);margin-top:10px}
+@media(max-width:700px){.summary{grid-template-columns:1fr}}
+.n-banner{display:none;align-items:center;gap:10px;padding:12px 15px;border-radius:10px;margin-bottom:14px;
+  background:#fff6e9;border:1px solid #f5e1bd;color:#7a4a08;font-size:13px}
+.n-banner.show{display:flex}
+.n-banner strong{font-weight:750}
+.n-pill{display:inline-block;background:#7a4a08;color:#fff;border-radius:20px;padding:2px 10px;
+  font-size:12px;font-weight:700;white-space:nowrap}
+.hero{background:linear-gradient(135deg,#f1efff,#fbeee6);border:1px solid var(--line);border-radius:18px;
+  padding:26px 24px;margin-bottom:16px}
+.hero .kicker{font-size:12px;font-weight:750;letter-spacing:.08em;color:var(--accent)}
+.hero h2{font-size:28px;line-height:1.2;margin:8px 0 10px;letter-spacing:-.4px}
+.hero p{max-width:760px}
+.flip{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.flip td,.flip th{padding:8px 7px}
+.flip th:nth-child(2),.flip td:nth-child(2){text-align:left}
+.flip .w-ai{color:var(--accent);font-weight:700}.flip .w-hu{color:var(--human);font-weight:700}
+.steps{margin:6px 0 0;padding-left:20px}.steps li{margin:6px 0}
+.takehome{font-size:18px;font-weight:700;line-height:1.45;border-left:4px solid var(--accent);padding:6px 0 6px 14px;margin:8px 0}
+.bigq-note{font-size:13px;color:var(--muted)}
+.infopop{position:fixed;left:16px;right:16px;bottom:16px;max-width:460px;margin:0 auto;z-index:50;
+  background:var(--panel);border:1px solid #d7d5f7;border-radius:14px;box-shadow:0 12px 40px #20243a33;
+  padding:16px 16px 14px;font-size:14px;display:none}
+.infopop.show{display:block}
+.infopop .x{float:right;margin:-4px -4px 6px 10px}
+.modebar{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:10px;padding:3px;background:var(--bg)}
+.modebar button{border:0;background:transparent;color:var(--muted);padding:7px 13px;border-radius:8px;font-weight:650;font-size:13px}
+.modebar button.on{background:var(--panel);color:var(--accent);box-shadow:0 1px 4px #20243a1a}
+body:not(.advanced) .adv{display:none!important}
+.refs{margin:6px 0 0;padding-left:20px;font-size:13px}.refs li{margin:8px 0;overflow-wrap:anywhere}
+#expExplanation .flip td:nth-child(2),#expExplanation .flip th:nth-child(2){text-align:right}
+body.aionly .hu-only{display:none!important}
+body:not(.aionly) .ai-only-note{display:none!important}
+body.raionly .rhu{display:none!important}
+body:not(.raionly) .rai-only{display:none!important}
+.cmp-empty{text-align:center;padding:40px 20px}
+.cmp-empty p{max-width:520px;margin:8px auto 16px}
+:focus-visible{outline:3px solid #9d93f0;outline-offset:2px}
+@media(max-width:900px){
+ .span8,.span7,.span6,.span5,.span4{grid-column:span 12}
+ .metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:520px){
+ main{padding:15px 12px 40px}.card{padding:14px}
+ .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #interpretations,.metric-guide{grid-template-columns:1fr}
+ nav button{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">∑</div>
+    <div><h1>Is Math Biased?</h1>
+      <div class="sub">AI vs Human Error Analyser &middot; comparing AI predictions, human predictions and the correct answers</div>
+    </div>
+    <div class="modebar" role="group" aria-label="Level of detail">
+      <button id="modeSimple" class="on" aria-pressed="true">Simple</button>
+      <button id="modeAdv" aria-pressed="false">Advanced</button>
+    </div>
+  </div>
+  <nav aria-label="Main navigation">
+    <button class="active" data-tab="start">Start here</button>
+    <button data-tab="analyser">Analyser</button>
+    <button data-tab="compare">Compare</button>
+    <button data-tab="experiments">Experiments</button>
+    <button data-tab="guide">Metric Guide</button>
+    <button data-tab="research">Research Data</button>
+  </nav>
+</header>
+
+<main>
+<section class="page active" id="start">
+  <div class="hero">
+    <div class="kicker">MATH+AI FUTURES &middot; OUR BIG QUESTION</div>
+    <h2>Is math biased? Can the formula we choose decide whether AI or humans come out on top?</h2>
+    <p>People say an AI is "more accurate" than humans as if accuracy were one number. It isn't: every error formula
+    notices some mistakes and ignores others. This site lets you test whether the <strong>choice of formula</strong>
+    can change who looks like the winner.</p>
+    <div class="row" style="margin-top:14px;max-width:560px">
+      <button class="btn primary" id="tryFlip">Try it: same data, different winner</button>
+      <button class="btn" data-goto="analyser">Open the Analyser</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card span6">
+      <h3>The problem</h3>
+      <p>AI systems are judged by numbers like "95% accurate" or "error of 2.3", and those numbers decide whether people
+      trust an AI over a person. But the number depends on which formula was used. If the formula hides the kind of
+      mistake that matters, a harmful AI can look excellent on paper.</p>
+    </div>
+    <div class="card span6">
+      <h3>The mathematics we use</h3>
+      <p>Every measure here starts from one idea: <strong>error = prediction &minus; correct answer</strong>.</p>
+      <ul class="steps">
+        <li><strong>Mean error</strong> &mdash; shows direction, but positive and negative errors cancel.</li>
+        <li><strong>Absolute value</strong> (MAE) &mdash; removes the sign so errors cannot cancel.</li>
+        <li><strong>Squares and square roots</strong> (RMSE) &mdash; make big misses count much more.</li>
+        <li><strong>Median and maximum</strong> &mdash; the typical miss versus the worst miss.</li>
+      </ul>
+    </div>
+
+    <div class="card span12">
+      <h3>The answer in 30 seconds</h3>
+      <p>The correct answers are 10, 20, 30, 40, 50, 60. The <span style="color:var(--accent);font-weight:700">AI</span>
+      is perfect five times and misses once by 10. The <span style="color:var(--human);font-weight:700">humans</span>
+      are off by exactly 2 every time.</p>
+      <div class="table-wrap"><table class="flip">
+        <thead><tr><th>Formula used</th><th>What it asks</th><th>AI</th><th>Humans</th><th>Winner</th></tr></thead>
+        <tbody>
+          <tr><td>Median absolute error</td><td>How big is a typical miss?</td><td>0</td><td>2</td><td class="w-ai">AI</td></tr>
+          <tr><td>Mean absolute error (MAE)</td><td>How big is the average miss?</td><td>1.67</td><td>2</td><td class="w-ai">AI</td></tr>
+          <tr><td>Root mean squared error (RMSE)</td><td>Are there big misses?</td><td>4.08</td><td>2</td><td class="w-hu">Humans</td></tr>
+          <tr><td>Maximum error</td><td>How bad is the worst miss?</td><td>10</td><td>2</td><td class="w-hu">Humans</td></tr>
+        </tbody>
+      </table></div>
+      <p style="margin-top:12px"><strong>Same data, opposite verdicts.</strong> Every number is calculated correctly. The bias
+      is not in the arithmetic; it is in <em>choosing</em> which formula to report.</p>
+      <button class="btn primary" id="tryFlip2">Load this data and check it yourself</button>
+    </div>
+
+    <div class="card span6">
+      <h3>How this connects to AI</h3>
+      <p>AI models are trained by making one chosen error formula as small as possible, and tested with the same formulas
+      before they are used. So the formula shapes what an AI learns to care about, and decides whether it is called
+      "good enough".</p>
+    </div>
+    <div class="card span6">
+      <h3>Two meanings of "bias" on this site</h3>
+      <p><strong>Statistical bias</strong> is a number: the mean error. It shows whether predictions lean too high or too low.</p>
+      <p><strong>Bias in the judging</strong> is our Big Question: a formula that quietly favours one side or hides one kind
+      of mistake. A formula can show zero statistical bias and still be a biased way to judge.</p>
+    </div>
+
+    <div class="card span6">
+      <h3>How to explore this site</h3>
+      <ol class="steps">
+        <li><strong>Analyser</strong> &mdash; drag a point and watch every measure change.</li>
+        <li><strong>Compare</strong> &mdash; the same measures for the AI and for humans, side by side.</li>
+        <li><strong>Experiments</strong> &mdash; start with <em>Pick the Winner</em> and the <em>Fairness Lab</em>.</li>
+        <li><strong>Metric Guide</strong> &mdash; what each formula answers, plus an 8-question check.</li>
+        <li><strong>Research Data</strong> &mdash; load answers from people and an AI and compare them.</li>
+      </ol>
+      <p class="small">Use <strong>Simple</strong> (top right) for the five main measures, or <strong>Advanced</strong> for all
+      measures and the full statistics.</p>
+    </div>
+    <div class="card span6">
+      <h3>AI use disclosure</h3>
+      <!-- EDIT THIS PARAGRAPH so it states exactly what your group did and which AI tools you used. -->
+      <p>We used AI assistants, including Claude by Anthropic, to help write and debug the website's code and to draft
+      parts of the explanations. Our group chose the Big Question, decided which formulas to include, designed the
+      experiments, tested the site, and checked the calculations ourselves. The example numbers on this site are invented
+      for teaching and are not real AI results.</p>
+    </div>
+
+    <div class="card span12">
+      <h3>About this project</h3>
+      <!-- EDIT: replace the bracketed parts with your real names, course, section and instructor. -->
+      <p><strong>Group members:</strong> [Member 1], [Member 2], [Member 3], [Member 4]</p>
+      <p><strong>Course:</strong> MATH 10 &middot; [Section] &middot; [School]</p>
+      <p><strong>Instructor:</strong> [Instructor's name]</p>
+      <p class="small">MATH+AI Futures Project &middot; "Mathematics and AI: Shaping a Responsible and Inclusive Future"</p>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="analyser">
+  <div class="row" style="margin-bottom:18px">
+    <div><h2>Prediction workspace</h2>
+      <p class="sub">Type values, load a preset, or drag points on the graphs.</p>
+    </div>
+    <div style="flex:0 0 auto"><button class="btn" id="reset">Reset example</button></div>
+  </div>
+
+  <div class="card span12" style="margin-bottom:16px">
+    <h3>Live measures &mdash; AI predictions</h3>
+    <p class="sub">Error = prediction &minus; correct answer.<span class="hu-only"> The humans' figures are on the
+    <button class="linkish" data-goto="compare">Compare</button> tab.</span></p>
+    <div class="metrics" id="metrics"></div>
+    <div class="adv" style="margin-top:20px">
+      <h3 style="margin-bottom:6px">Data summary <button class="info" data-info="The mean is the average; the median is the middle value once sorted, which one extreme value cannot drag around. If they differ a lot, the column is skewed.">i</button></h3>
+      <div class="summary" id="dataSummary"></div>
+      <p class="sumnote" id="sumNote"></p>
+    </div>
+    <div class="adv" style="margin-top:14px">
+      <h3 style="margin-bottom:6px">Accuracy within tolerance <button class="info" data-info="How often each source landed within a chosen percentage of the correct answer. It answers a different question from MAE or R-squared: how often is a prediction good enough?">i</button></h3>
+      <div class="row" style="align-items:center;gap:14px">
+        <label for="tolRange" style="flex:0 0 auto;margin:0">Tolerance: <strong id="tolValue">10%</strong></label>
+        <input class="range" id="tolRange" type="range" min="1" max="50" step="1" value="10" style="flex:1 1 auto">
+      </div>
+      <div class="metrics" id="tolMetrics" style="margin-top:12px"></div>
+      <p class="small" id="tolNote"></p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card span5">
+      <h3>Prediction data <button class="info" data-info="Enter lists of equal length. Each position is one observation. Errors are prediction minus correct answer.">i</button></h3>
+      <div class="field"><label for="actual">Correct answers</label>
+        <textarea id="actual">10, 20, 30, 40, 50, 60</textarea></div>
+      <div class="field"><label for="predicted">AI predictions</label>
+        <textarea id="predicted">12, 18, 31, 37, 53, 59</textarea></div>
+      <div class="field"><label for="human">Human predictions <span class="small" style="font-weight:400">(optional &mdash; leave empty to analyse the AI alone)</span></label>
+        <textarea id="human">11, 22, 28, 43, 48, 62</textarea></div>
+      <div class="row">
+        <button class="btn primary" id="applyData">Apply data</button>
+        <button class="btn" id="addPoint">Add observation</button>
+        <button class="btn hu-only" id="clearHuman">Clear human data</button>
+      </div>
+      <div class="notice ai-only-note" style="margin-top:12px"><strong>AI-only mode.</strong> Every measure here describes the AI against the correct answers. Add human predictions above to compare.</div>
+      <p class="small" id="dataStatus" aria-live="polite"></p>
+      <hr>
+      <h3>Presets</h3>
+      <div class="row">
+        <select id="preset">
+          <option value="flip">Who wins depends on the metric</option>
+          <option value="balanced">Balanced errors</option>
+          <option value="bias">Systematic bias</option>
+          <option value="noisy">Noisy predictions</option>
+          <option value="aiBias">AI biased, humans noisy</option>
+          <option value="humanBias">Humans biased, AI accurate</option>
+          <option value="outlier">One outlier (AI)</option>
+          <option value="scale">Wrong scale</option>
+        </select>
+        <button class="btn" id="loadPreset">Load</button>
+      </div>
+    </div>
+
+    <div class="card span7">
+      <h3>Correct vs. predicted <button class="info" data-info="Each dot is one observation: across is the correct answer, up is the prediction. Dots on the diagonal are perfect. Drag a dot up or down to change its prediction.">i</button></h3>
+      <canvas id="scatter" aria-label="Correct versus predicted scatter plot"></canvas>
+      <div class="chart-note"><span class="hu-only">Purple = AI, orange = humans. </span><span class="ai-only-note">Purple = AI. </span>The diagonal is a perfect prediction.</div>
+      <hr>
+      <h3>Residual plot <button class="info" data-info="Each dot's height is its error. Above zero means too high; below zero means too low. A slant or curve hints at a pattern worth investigating.">i</button></h3>
+      <canvas id="residual" aria-label="Residual plot"></canvas>
+      <div class="chart-note">The zero line is a perfect prediction. Drag a dot to change its error.</div>
+    </div>
+
+    <div class="card span6 adv">
+      <h3>Target MSE <button class="info" data-info="Rescale keeps the current mean error and stretches the scatter to reach the target. Synthetic creates a new illustrative error pattern; it is not a real AI result.">i</button></h3>
+      <div class="field"><label for="targetMSE">Desired MSE</label><input id="targetMSE" type="number" min="0" step="any" value="5"></div>
+      <div class="field"><label for="mseMode">Method</label>
+        <select id="mseMode"><option value="rescale">Rescale centered errors</option><option value="synthetic">Generate synthetic errors</option></select></div>
+      <button class="btn primary" id="applyMSE">Apply target MSE</button>
+      <div id="mseStatus" class="notice" aria-live="polite">Choose a target and apply it.</div>
+    </div>
+
+    <div class="card span6 adv">
+      <h3>Target mean error / bias <button class="info" data-info="Adding the same amount to every prediction shifts the mean error by that amount and leaves the spread unchanged.">i</button></h3>
+      <div class="field"><label for="targetBias">Desired mean error</label><input id="targetBias" type="number" step="any" value="0"></div>
+      <button class="btn primary" id="applyBias">Apply target bias</button>
+      <hr>
+      <h3>Error shift and scale</h3>
+      <label for="shift">Shift errors: <span id="shiftValue">0</span></label>
+      <input class="range" id="shift" type="range" min="-20" max="20" step=".5" value="0">
+      <label for="scale" style="margin-top:12px">Scale errors: <span id="scaleValue">1.00×</span></label>
+      <input class="range" id="scale" type="range" min="0" max="3" step=".05" value="1">
+      <button class="btn" id="applyTransform" style="margin-top:12px">Apply shift and scale</button>
+      <p class="small">Nothing changes until you press Apply.</p>
+    </div>
+
+    <div class="card span12">
+      <h3>Worst offenders</h3>
+      <p class="sub">The observations with the largest errors, biggest first.</p>
+      <div class="table-wrap"><table><thead id="offendersHead"></thead><tbody id="offenders"></tbody></table></div>
+    </div>
+
+    <div class="card span12">
+      <div class="row">
+        <div><h2>What the Math Says</h2>
+          <p class="sub">Updates with your data. Open "Show the math" for the working.</p></div>
+        <span class="tag">LIVE</span>
+      </div>
+      <div id="interpretations"></div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="compare">
+  <h2>AI vs humans, side by side</h2>
+  <div class="card cmp-empty" id="cmpEmpty" style="display:none">
+    <h3>No human data to compare</h3>
+    <p>The Analyser currently holds AI predictions only. Comparing needs a human prediction for every observation.</p>
+    <button class="btn primary" data-goto="analyser">Add human predictions on the Analyser</button>
+  </div>
+  <div id="cmpBody">
+  <div class="n-banner" id="nBannerCompare"><span class="n-pill" id="nPillCompare">n = 6</span><span id="nTextCompare"></span></div>
+  <p class="sub">The same measures computed twice. Smaller is better for error measures; closer to zero is better for bias;
+  higher is better for correlation and R&sup2;.</p>
+  <div class="card" style="margin-bottom:16px"><div class="metrics" id="cmpMetrics"></div></div>
+  <div class="grid">
+    <div class="card span7">
+      <h3>Error size, head to head</h3>
+      <canvas id="cmpChart" aria-label="Bar chart comparing AI and human error measures"></canvas>
+      <div class="legend"><span><i class="dot" style="background:#6558d9"></i>AI</span><span><i class="dot" style="background:#c2683f"></i>Human</span></div>
+      <div class="chart-note">Shorter bars are better here.</div>
+    </div>
+    <div class="card span5">
+      <h3>What the comparison says</h3>
+      <div id="cmpVerdict"></div>
+    </div>
+    <div class="card span12">
+      <div class="explainbox" id="cmpGuide"></div>
+    </div>
+    <div class="card span12">
+      <h3>Observation by observation</h3>
+      <p class="sub">Who got closer on each one, and whether their errors ran the same way.</p>
+      <div class="table-wrap"><table><thead><tr><th>Point</th><th>Correct</th><th>AI error</th><th>Human error</th><th>Same direction?</th><th>Closer</th><th>AI &minus; human error</th></tr></thead><tbody id="patternTable"></tbody></table></div>
+    </div>
+    <div class="card span6 adv">
+      <h3>Do they miss the same way?</h3>
+      <canvas id="shareChart" aria-label="Scatter plot of AI error against human error"></canvas>
+      <div class="chart-note">Across: AI error. Up: human error. Green corners = same direction; red corners = opposite.</div>
+      <div id="shareReadout"></div>
+    </div>
+    <div class="card span6 adv">
+      <h3>Error direction</h3>
+      <canvas id="dirChart" aria-label="Chart of error directions for AI and human"></canvas>
+      <div class="chart-note">How often each source predicted too high or too low.</div>
+      <div id="agreement"></div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section class="page" id="experiments">
+  <h2>Experiments</h2>
+  <p class="sub">Change one thing at a time and watch the measures react. Experiments replace the Analyser data;
+  "Restore starting data" brings yours back.</p>
+  <div class="experiment-list" id="experimentButtons"></div>
+  <div class="grid">
+    <div class="card span5">
+      <span class="tag" id="expTag">EXPERIMENT 1</span>
+      <h2 id="expTitle" style="margin-top:12px">Pick the Winner</h2>
+      <p id="expQuestion"></p>
+      <div id="expControls"></div>
+      <button class="btn primary" id="runExperiment" style="margin-top:12px">Apply experiment</button>
+      <button class="btn" id="expReset" style="margin-top:12px">Restore starting data</button>
+    </div>
+    <div class="card span7">
+      <h3>Observe the results</h3>
+      <div class="metrics" id="expMetrics"></div>
+      <div class="notice" id="expExplanation"></div>
+      <h3 style="margin-top:20px">What to look for</h3>
+      <p id="expLearning"></p>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="guide">
+  <h2>Metric Guide</h2>
+  <p class="sub">What each formula measures, and what it cannot see.</p>
+  <div class="metric-guide" id="guideCards"></div>
+  <details class="fold" id="challengeFold">
+    <summary>Check your understanding &mdash; 8 quick questions</summary>
+    <p class="sub">The numbers in these questions are invented for practice.</p>
+    <div class="grid">
+      <div class="card span7">
+        <span class="tag" id="challengeCount">CHALLENGE 1 OF 8</span>
+        <h2 id="challengeTitle" style="margin-top:12px"></h2>
+        <p id="challengeQuestion"></p>
+        <div id="challengeOptions"></div>
+        <button class="btn primary" id="checkAnswer">Check answer</button>
+        <div id="answerFeedback" aria-live="polite"></div>
+        <div class="row" style="margin-top:15px">
+          <button class="btn" id="previousChallenge">Previous</button>
+          <button class="btn" id="nextChallenge">Next challenge</button>
+        </div>
+      </div>
+      <div class="card span5">
+        <h3>What these questions cover</h3>
+        <ul class="steps">
+          <li>Why errors can cancel.</li>
+          <li>Squared versus absolute errors.</li>
+          <li>The effect of one outlier.</li>
+          <li>Why MAPE fails at zero.</li>
+          <li>Correlation versus agreement.</li>
+          <li>Choosing a formula for a real task.</li>
+          <li>Who receives the errors.</li>
+        </ul>
+        <button class="btn primary" id="openAnalyser">Try it in the Analyser</button>
+      </div>
+    </div>
+  </details>
+  <div class="card" style="margin-top:16px">
+    <h3>References</h3>
+    <ul class="refs">
+      <li>Willmott, C. J., &amp; Matsuura, K. (2005). Advantages of the mean absolute error (MAE) over the root mean square
+      error (RMSE) in assessing average model performance. <em>Climate Research, 30</em>(1), 79&ndash;82.
+      https://doi.org/10.3354/cr030079</li>
+      <li>Chai, T., &amp; Draxler, R. R. (2014). Root mean square error (RMSE) or mean absolute error (MAE)? &ndash; Arguments
+      against avoiding RMSE in the literature. <em>Geoscientific Model Development, 7</em>, 1247&ndash;1250.
+      https://doi.org/10.5194/gmd-7-1247-2014</li>
+    </ul>
+    <p class="small">These two papers argue opposite sides of which formula scientists should report. Even experts treat
+    the choice of metric as a judgement, not a fact.</p>
+  </div>
+</section>
+
+<section class="page" id="research">
+  <h2>Research data</h2>
+  <p class="notice good" style="margin:0 0 12px"><strong>Privacy:</strong> files and rows you load here stay in your own browser. Nothing is uploaded or saved by this site.</p>
+  <p class="sub">Load right-or-wrong answers from people and from an AI, check them, and read the summary. Every figure is
+  calculated from the data you load.</p>
+
+  <div class="demo-flag" id="demoFlag">
+    <span class="n-pill" style="background:#3b2fa8">EXAMPLE</span>
+    <span>These are <strong>demonstration values</strong>, not collected results. Load your own CSV to replace them.</span>
+  </div>
+  <div class="n-banner show" id="rBanner">
+    <span class="n-pill">small study</span>
+    <span id="rBannerText">Load a dataset to see its counts.</span>
+  </div>
+
+  <div class="grid">
+    <div class="card span5">
+      <h3>1 &middot; Import <button class="info" data-info="One row per answer: who answered, which problem, its category, whether it was right, and whether the row is a human or the AI. Excel and Google Sheets can both save as CSV.">i</button></h3>
+      <div class="dropzone" id="dropzone">Drop a .csv file here, or click to choose one</div>
+      <input type="file" id="fileInput" accept=".csv,text/csv" style="display:none">
+      <div class="field" style="margin-top:14px">
+        <label for="csvText">Or paste the rows</label>
+        <textarea id="csvText" style="min-height:150px" spellcheck="false"></textarea>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="loadCsv">Load data</button>
+        <button class="btn" id="loadSample">Load example data</button>
+        <button class="btn" id="loadSampleAI">AI-only example</button>
+        <button class="btn" id="clearData">Clear</button>
+      </div>
+      <p class="small" id="csvStatus" aria-live="polite"></p>
+      <hr>
+      <h3>Expected columns</h3>
+      <div class="formula">participant, problem, category, source, correct</div>
+      <p class="small"><strong>source</strong> is <em>human</em> or <em>ai</em>. <strong>correct</strong> is 1 or 0 (yes/no
+      also works). Human rows need a participant ID; AI rows may leave it blank. A file with only AI rows is fine.</p>
+    </div>
+
+    <div class="card span7">
+      <h3>2 &middot; Check</h3>
+      <p class="sub">Problems in the data are listed before anything is calculated.</p>
+      <div id="validation"></div>
+    </div>
+
+    <div class="card span12">
+      <h3>3 &middot; Counts
+        <button class="info" data-info="10 people answering 12 problems give 120 human responses. That is not 120 participants. The counts are kept separate so they cannot be confused.">i</button>
+      </h3>
+      <div class="rcount" id="rCounts"></div>
+      <p class="rHinweis" id="rCountsNote"></p>
+    </div>
+
+    <div class="card span12">
+      <h3>Accuracy <button class="info" data-info="Answers here are right or wrong, so accuracy is the right measure. MAE and RMSE need numeric answers and belong to the Analyser.">i</button></h3>
+      <div class="rgrid" id="rMetrics"></div>
+      <p class="rHinweis" id="rMetricsNote"></p>
+      <div class="explainbox adv" id="rMeaning"></div>
+    </div>
+
+    <div class="card span6">
+      <h3>Accuracy by category</h3>
+      <canvas id="rCatChart" aria-label="Bar chart of human and AI accuracy by problem category"></canvas>
+      <div class="legend">
+        <span class="rhu"><i class="dot" style="background:#c2683f"></i>Humans</span>
+        <span><i class="dot" style="background:#6558d9"></i>AI</span>
+      </div>
+      <div class="chart-note">Longer is better here &mdash; this is accuracy, not error.</div>
+    </div>
+
+    <div class="card span6 rhu">
+      <h3>Human accuracy across participants</h3>
+      <canvas id="rPartChart" aria-label="Bar chart of each participant accuracy"></canvas>
+      <div class="chart-note">The dashed line is the group average.</div>
+    </div>
+
+    <div class="card span6">
+      <h3>Accuracy by source</h3>
+      <div class="rgrid" id="accSource"></div>
+      <div class="explainbox" id="rSpread"></div>
+    </div>
+
+    <div class="card span6">
+      <h3>Accuracy by category &mdash; answer counts</h3>
+      <div id="accCategory"></div>
+      <p class="rHinweis" id="catNote"></p>
+    </div>
+
+    <div class="card span12 adv rhu">
+      <h3>Coverage &mdash; what is present and what is missing</h3>
+      <div class="rgrid" id="coverageStats"></div>
+      <div class="explainbox" id="coverageNote"></div>
+    </div>
+
+    <div class="card span12 adv rhu">
+      <h3>Humans vs AI &mdash; where the numbers come from
+        <button class="info" data-info="Human accuracy averages many people; AI accuracy is one measurement. The human figure has spread and the AI figure does not, so this is not a like-for-like contest.">i</button>
+      </h3>
+      <p class="small"><strong>"Correct"</strong> means the final answer matched the expected answer exactly, under a scoring
+      rule fixed before collecting. It tests exact correctness, not closeness.</p>
+      <div class="grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div><div class="rgrid" id="hvHuman"></div></div>
+        <div><div class="rgrid" id="hvAI"></div></div>
+      </div>
+      <canvas id="hvChart" aria-label="Chart comparing the human distribution with the single AI figure" style="margin-top:14px"></canvas>
+      <div class="chart-note">Each dot is one participant. Dashed line: human mean. Purple line: the AI.</div>
+      <div class="explainbox" id="hvNote"></div>
+    </div>
+
+    <div class="card span12">
+      <h3>Accuracy by problem</h3>
+      <p class="sub"><span class="rhu">Which problems were hardest, and whether the AI and the humans struggled on the same ones.</span><span class="rai-only">Which problems the AI got right and wrong.</span></p>
+      <div class="table-wrap"><table><thead><tr>
+        <th>Problem</th><th>Category</th><th>AI</th><th class="rhu">Human correct</th><th class="rhu">Human rate</th><th class="rhu">AI vs human rate</th>
+      </tr></thead><tbody id="probTable"></tbody></table></div>
+      <div class="explainbox" id="rGapNote"></div>
+    </div>
+
+    <div class="card span12 rhu">
+      <h3>Participants, by anonymous ID</h3>
+      <div class="table-wrap"><table><thead><tr>
+        <th>Participant</th><th>Answered</th><th>Correct</th><th>Accuracy</th><th>Per-problem result</th>
+      </tr></thead><tbody id="partTable"></tbody></table></div>
+    </div>
+
+    <div class="card span12">
+      <h3>What these figures can and cannot show</h3>
+      <div class="limits" id="rLimits"></div>
+    </div>
+
+    <div class="card span12">
+      <h3>4 &middot; Export</h3>
+      <p class="sub">Download these tables as CSV for your report.</p>
+      <div class="row">
+        <button class="btn primary" id="exportSummary">Summary by source</button>
+        <button class="btn" id="exportCategory">By category</button>
+        <button class="btn" id="exportProblem">By problem</button>
+        <button class="btn rhu" id="exportParticipant">By participant</button>
+        <button class="btn" id="exportRaw">Clean dataset</button>
+      </div>
+      <p class="small" id="exportStatus" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+</main>
+<footer>Is Math Biased? &middot; AI vs Human Error Analyser &middot; MATH+AI Futures Project &middot; Example data are invented for teaching and are not evidence of real AI performance.</footer>
+
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+let actual=[10,20,30,40,50,60], predicted=[12,18,31,37,53,59], human=[11,22,28,43,48,62];
+let startExperiment={a:[],p:[]}, activeExperiment=0, challengeIndex=0;
+let experimentParams={shift:3,outlier:15,scale:1.5};
+let drag=null, plotCache={};
+let baselineMetrics=null;
+
+const metricInfo={
+ MAE:{name:"Mean Absolute Error",formula:"MAE = mean(|prediction − actual|)",unit:"same units as target",
+ meaning:"The average size of the errors, ignoring their direction.",
+ limit:"MAE treats errors linearly. It does not reveal whether errors are consistently positive or negative."},
+ MSE:{name:"Mean Squared Error",formula:"MSE = mean(error²)",unit:"squared target units",
+ meaning:"The average squared error. Squaring makes large errors disproportionately influential.",
+ limit:"Its units are squared, so its magnitude is not directly in the target's original units."},
+ RMSE:{name:"Root Mean Squared Error",formula:"RMSE = √MSE",unit:"same units as target",
+ meaning:"The square root of the average squared error, expressed in the target's units.",
+ limit:"It is sensitive to large errors and does not describe their direction or distribution."},
+ Bias:{name:"Mean Error / Bias",formula:"Bias = mean(prediction − actual)",unit:"same units as target",
+ meaning:"Positive bias means overprediction on average; negative bias means underprediction on average.",
+ limit:"Positive and negative errors can cancel. Zero bias does not mean every prediction is accurate."},
+ R2:{name:"Coefficient of Determination",formula:"R² = 1 − SSE / SST",unit:"dimensionless",
+ meaning:"Compares squared prediction error with the variation around the actual-value mean.",
+ limit:"It is not the percentage of predictions that are correct. It can be negative, and is undefined when actual values are constant."},
+ MAPE:{name:"Mean Absolute Percentage Error",formula:"MAPE = mean(|error / actual|) × 100%",unit:"percent",
+ meaning:"The average absolute error relative to the actual value.",
+ limit:"Undefined when any actual value is zero; values near zero can dominate the result."},
+ MedAE:{name:"Median Absolute Error",formula:"Median(|error|)",unit:"same units as target",
+ meaning:"The middle absolute error after sorting the absolute errors.",
+ limit:"Can hide a few extremely large errors."},
+ MaxAE:{name:"Maximum Absolute Error",formula:"max(|error|)",unit:"same units as target",
+ meaning:"The largest absolute miss in the dataset.",
+ limit:"Does not describe typical performance and can be sensitive to a single unusual observation."},
+ SD:{name:"Standard Deviation of Errors",formula:"SD(error) = √mean((error − bias)²)",unit:"same units as target",
+ meaning:"Describes how widely errors spread around their mean.",
+ limit:"Low spread can coexist with substantial bias."},
+ Corr:{name:"Correlation",formula:"corr(actual, predicted)",unit:"dimensionless, −1 to +1",
+ meaning:"Measures the strength and direction of a linear relationship between actual and predicted values.",
+ limit:"High correlation does not guarantee accurate predictions or agreement in scale."}
+};
+const metricOrder=["MAE","MSE","RMSE","Bias","R2","MAPE","MedAE","MaxAE","SD","Corr"];
+
+function mean(a){return a.reduce((s,x)=>s+x,0)/a.length}
+function median(a){const s=[...a].sort((x,y)=>x-y),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2}
+function calc(a=actual,p=predicted){
+ const e=p.map((v,i)=>v-a[i]), abs=e.map(Math.abs), sq=e.map(x=>x*x);
+ const m=mean(e), mse=mean(sq), av=mean(a), pv=mean(p);
+ const sst=a.reduce((s,x)=>s+(x-av)**2,0), sse=sq.reduce((s,x)=>s+x,0);
+ const denom=Math.sqrt(a.reduce((s,x)=>s+(x-av)**2,0)*p.reduce((s,x)=>s+(x-pv)**2,0));
+ const mape=a.some(x=>x===0)?null:mean(e.map((x,i)=>Math.abs(x/a[i])))*100;
+ return {e,abs,mse,MAE:mean(abs),MSE:mse,RMSE:Math.sqrt(mse),Bias:m,
+ R2:sst===0?null:1-sse/sst,MAPE:mape,MedAE:median(abs),MaxAE:Math.max(...abs),
+ SD:Math.sqrt(mean(e.map(x=>(x-m)**2))),Corr:denom===0?null:e.reduce((s,x,i)=>s+(a[i]-av)*(p[i]-pv),0)/denom};
+}
+// All displayed values go through fmt so cards, notes, tables and charts agree.
+// Defaults: 3 significant decimals for metrics, 1 for the research layer's percentages.
+function fmt(x,d=3){if(x===null||!Number.isFinite(x))return "N/A";let r=Number(x).toFixed(d);if(r.includes("."))r=r.replace(/0+$/,"").replace(/\.$/,"");return r===""||r==="-0"?"0":r}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function setText(id,s){$(id).textContent=s}
+function parseList(s){return s.trim().split(/[\s,;]+/).filter(Boolean).map(Number)}
+function commitBaseline(){baselineMetrics=calc();}
+function syncInputs(){$("actual").value=actual.join(", ");$("predicted").value=predicted.map(x=>fmt(x,4)).join(", ");$("human").value=human.length?human.map(x=>fmt(x,4)).join(", "):""}
+const SIMPLE_KEYS=["MAE","RMSE","MedAE","MaxAE","Bias"];
+function isAdv(){return document.body.classList.contains("advanced")}
+function shownKeys(){return isAdv()?metricOrder:SIMPLE_KEYS}
+function renderMetrics(target="metrics"){
+ const m=calc(),el=$(target);
+ el.innerHTML=shownKeys().map(k=>`<div class="metric"><div class="name">${metricInfo[k].name} <button class="info" data-info="${esc(metricInfo[k].meaning+" "+metricInfo[k].limit)}" aria-label="Explain ${k}">i</button></div><div class="value">${fmt(m[k],4)}</div><div class="unit">${k==="R2"||k==="Corr"?"dimensionless":k==="MAPE"?"percent":k==="MSE"?"squared units":" "}</div></div>`).join("");
+}
+function showInfo(message){
+ let pop=$("infoPop");
+ if(!pop){
+  pop=document.createElement("div");pop.id="infoPop";pop.className="infopop";pop.setAttribute("role","dialog");
+  pop.setAttribute("aria-live","polite");
+  pop.innerHTML='<button class="btn x" id="infoClose" aria-label="Close">Close</button><div id="infoText"></div>';
+  document.body.appendChild(pop);
+  $("infoClose").onclick=()=>pop.classList.remove("show");
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")pop.classList.remove("show")});
+ }
+ $("infoText").textContent=message;pop.classList.add("show");$("infoClose").focus();
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-info]");if(b)showInfo(b.dataset.info)});
+function hasHuman(){return human.length>0}
+function applyData(a,p,h){
+ h=(h===undefined)?human:h;
+ const bad=arr=>arr.some(x=>!Number.isFinite(x));
+ if(!a.length||bad(a)||bad(p)||bad(h)){
+  $("dataStatus").textContent="Every value must be a number, and the correct answers cannot be empty.";return false;
+ }
+ if(a.length!==p.length){
+  $("dataStatus").textContent=`Correct answers (${a.length}) and AI predictions (${p.length}) need the same number of values.`;return false;
+ }
+ if(h.length&&h.length!==a.length){
+  $("dataStatus").textContent=`Human predictions need one value per correct answer (${a.length}), or leave the box empty to analyse the AI alone. You entered ${h.length}.`;return false;
+ }
+ actual=[...a];predicted=[...p];human=[...h];syncInputs();commitBaseline();render();
+ $("dataStatus").textContent=`Loaded ${a.length} observations${h.length?"":" (AI only)"}.`;return true;
+}
+function render(){
+ document.body.classList.toggle("aionly",!hasHuman());
+ renderMetrics();drawAll();renderOffenders();renderInterpretations();
+ if($("tolMetrics"))renderTolerance();
+ if($("dataSummary"))renderSummary();
+ if($("expMetrics"))renderMetrics("expMetrics");
+}
+function renderOffenders(){
+ const H=hasHuman();
+ $("offendersHead").innerHTML="<tr><th>Point</th><th>Correct</th><th>AI</th>"+(H?"<th>Human</th>":"")+"<th>AI error</th>"+(H?"<th>Human error</th><th>Closer</th>":"")+"</tr>";
+ const rows=actual.map((v,i)=>({i,a:v,ai:predicted[i],hu:H?human[i]:null,ae:predicted[i]-v,he:H?human[i]-v:0}))
+  .sort((x,y)=>Math.max(Math.abs(y.ae),Math.abs(y.he))-Math.max(Math.abs(x.ae),Math.abs(x.he))).slice(0,10);
+ $("offenders").innerHTML=rows.map(x=>{
+  if(!H) return `<tr><td>${x.i+1}</td><td>${fmt(x.a)}</td><td>${fmt(x.ai)}</td><td>${fmt(x.ae)}</td></tr>`;
+  const closer=Math.abs(x.ae)<Math.abs(x.he)?'<span class="better">AI</span>':Math.abs(x.he)<Math.abs(x.ae)?'<span class="better">Human</span>':'<span class="muted">tie</span>';
+  return `<tr><td>${x.i+1}</td><td>${fmt(x.a)}</td><td>${fmt(x.ai)}</td><td>${fmt(x.hu)}</td><td>${fmt(x.ae)}</td><td>${fmt(x.he)}</td><td>${closer}</td></tr>`;
+ }).join("");
+}
+function insight(title,text,formula,deep,adv){
+ return `<article class="insight${adv?" adv":""}"><h3>${title}</h3><p>${text}</p><details><summary>Show the math</summary><div class="formula">${formula}</div><p>${deep}</p></details></article>`;
+}
+function errorCorrelation(){
+ const ae=calc(actual,predicted).e, he=calc(actual,human).e;
+ const ma=mean(ae), mh=mean(he);
+ const cov=ae.reduce((s,x,i)=>s+(x-ma)*(he[i]-mh),0);
+ const da=Math.sqrt(ae.reduce((s,x)=>s+(x-ma)**2,0)), dh=Math.sqrt(he.reduce((s,x)=>s+(x-mh)**2,0));
+ return (da===0||dh===0)?null:cov/(da*dh);
+}
+function comparisonInsight(){
+ const a=calc(actual,predicted), hm=calc(actual,human);
+ const aBetter=[], hBetter=[];
+ [['MAE','typical miss (MAE)'],['RMSE','big misses (RMSE)'],['MedAE','middle miss'],['MaxAE','worst miss']].forEach(([k,label])=>{
+  if(Math.abs(a[k]-hm[k])<1e-9)return; (a[k]<hm[k]?aBetter:hBetter).push(label); });
+ if(Math.abs(Math.abs(a.Bias)-Math.abs(hm.Bias))>1e-9)(Math.abs(a.Bias)<Math.abs(hm.Bias)?aBetter:hBetter).push('lean (bias)');
+ const text=(aBetter.length===0&&hBetter.length===0)
+  ? 'The two sources tie on every main measure.'
+  : 'AI ahead on: '+(aBetter.join(', ')||'none')+'. Humans ahead on: '+(hBetter.join(', ')||'none')+'.'
+    +(aBetter.length&&hBetter.length?' <strong>The winner depends on the formula.</strong>':'');
+ return insight('AI vs humans',text,
+  'AI: MAE '+fmt(a.MAE)+', RMSE '+fmt(a.RMSE)+', max '+fmt(a.MaxAE)+', bias '+fmt(a.Bias)+'\nHumans: MAE '+fmt(hm.MAE)+', RMSE '+fmt(hm.RMSE)+', max '+fmt(hm.MaxAE)+', bias '+fmt(hm.Bias),
+  'Correlation between the two error patterns: '+fmt(errorCorrelation())+' (near +1: they miss the same way; near −1: opposite ways).');
+}
+function renderInterpretations(){
+ const m=calc(),n=actual.length, maxI=m.abs.indexOf(Math.max(...m.abs));
+ let pattern;
+ if(m.SD<1e-9)pattern="Every error is identical: a constant offset, not necessarily accurate predictions.";
+ else if(m.Bias>m.SD*.5)pattern="Errors lean positive: the AI tends to predict too high.";
+ else if(m.Bias< -m.SD*.5)pattern="Errors lean negative: the AI tends to predict too low.";
+ else pattern="No strong lean. Positive and negative errors may be cancelling, so check the residual plot.";
+ const prev=baselineMetrics||m, delta=m.MSE-prev.MSE;
+ const changed=Math.abs(delta)<1e-8?"MSE is unchanged since your last edit.":`MSE ${delta>0?"rose":"fell"} by ${fmt(Math.abs(delta))} since your last edit.`;
+ const conflict=m.RMSE>m.MAE*1.15?"RMSE is well above MAE, so a few large errors are pulling it up.":"RMSE and MAE are close, so no single error dominates.";
+ const lim=[m.MAPE===null?"MAPE is undefined because a correct answer is zero.":"MAPE can overweight small correct answers.",
+  m.R2===null?"R² is undefined because all correct answers are equal.":"R² is not the percentage of correct predictions."].join(" ");
+ $("interpretations").innerHTML=
+  insight("What pattern is visible?",pattern,`Mean error = ${fmt(m.Bias)}\nError SD = ${fmt(m.SD)}`,`The largest error is ${fmt(m.abs[maxI])}, at observation ${maxI+1}. A pattern suggests something to investigate; it does not prove a cause.`)+
+  insight("How do the measures compare?",conflict+` MSE only looks bigger because it is in squared units; RMSE (${fmt(m.RMSE)}) is back in normal units, like MAE (${fmt(m.MAE)}).`,`MAE = ${fmt(m.MAE)}\nRMSE = ${fmt(m.RMSE)}\nMaximum error = ${fmt(m.MaxAE)}`,`MAE averages the error sizes. RMSE squares them first, so large errors count more, then takes the square root.`)+
+  (hasHuman()?comparisonInsight():"")+
+  insight("What changed?",changed,`MSE = (e₁² + e₂² + … + eₙ²) / n`,`Now: MSE ${fmt(m.MSE)}, MAE ${fmt(m.MAE)}, bias ${fmt(m.Bias)}.`,true)+
+  insight("Why is MSE this size?",`MSE ${fmt(m.MSE)} = ${fmt(m.Bias**2)} from the average lean + ${fmt(m.SD**2)} from the scatter.`,`MSE = bias² + variance of errors\n${fmt(m.MSE)} ≈ ${fmt(m.Bias**2)} + ${fmt(m.SD**2)}`,`This holds when the variance divides by n. Rounding can create tiny differences.`,true)+
+  insight("Limitations",lim,`MAPE = mean(|error / correct|) × 100%\nR² = 1 − SSE / SST`,`A measure is a summary, not a full explanation. Sample size and representativeness matter too.`,true)+
+  insight("Investigate next",`Try changing observation ${maxI+1}, the largest error.`,`${fmt(m.abs[maxI])}² ÷ ${n} = ${fmt(m.abs[maxI]**2/n)} of the MSE comes from this one point.`,`Only remove a real observation if there is a defensible reason.`,true);
+}
+function drawAll(){drawPlot($("scatter"),"scatter");drawPlot($("residual"),"residual")}
+function drawPlot(canvas,type){
+ const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+ if(!rect.width)return;
+ canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);
+ const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
+ const w=rect.width,h=rect.height,pad={l:62,r:16,t:18,b:38};
+ const pw=w-pad.l-pad.r,ph=h-pad.t-pad.b;
+ const H=hasHuman(), calcE=calc(actual,predicted).e, calcH=H?calc(actual,human).e:[];
+ // The residual plot is measured in errors, so its range comes from the errors alone.
+ // Using the actual values for this axis would draw small errors against a huge scale
+ // and make them look far smaller than they are.
+ const vals=type==="scatter"?actual.concat(predicted,H?human:[]):calcE.concat(calcH);
+ let min=Math.min(...vals),max=Math.max(...vals);
+ if(type==="scatter"){min=Math.min(min,0);max=Math.max(max,0)}
+ else {min=Math.min(min,0);max=Math.max(max,0)}
+ if(min===max){min-=1;max+=1}
+ const extra=(max-min)*.12;min-=extra;max+=extra;
+ const xMin=type==="scatter"?min:Math.min(...actual),xMax=type==="scatter"?max:Math.max(...actual);
+ let xmin=xMin,xmax=xMax;if(xmin===xmax){xmin-=1;xmax+=1}
+ if(type!=="scatter"){const xp=(xmax-xmin)*.06;xmin-=xp;xmax+=xp}
+ const ymin=min,ymax=max;
+ const X=x=>pad.l+(x-xmin)/(xmax-xmin)*pw;
+ const Y=y=>pad.t+(ymax-y)/(ymax-ymin)*ph;
+ ctx.clearRect(0,0,w,h);ctx.font="11px system-ui";ctx.strokeStyle="#e7e9f0";ctx.fillStyle="#777d90";ctx.lineWidth=1;
+ for(let j=0;j<=4;j++){const y=pad.t+ph*j/4;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.textAlign="right";ctx.fillText(fmt(ymax-(ymax-ymin)*j/4,1),pad.l-6,y+4);ctx.textAlign="left"}
+ for(let j=0;j<=4;j++){const x=pad.l+pw*j/4;ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();ctx.fillText(fmt(xmin+(xmax-xmin)*j/4,1),x-10,h-13)}
+ ctx.strokeStyle="#a5a9ba";ctx.lineWidth=1.5;ctx.beginPath();
+ if(type==="scatter"){ctx.moveTo(X(Math.max(xmin,ymin)),Y(Math.max(xmin,ymin)));ctx.lineTo(X(Math.min(xmax,ymax)),Y(Math.min(xmax,ymax)))}
+ else {ctx.moveTo(pad.l,Y(0));ctx.lineTo(w-pad.r,Y(0))}
+ ctx.stroke();
+ const m=calc(actual,predicted);
+ actual.forEach((a,i)=>{
+  const dots=[[H?-5:0,"#6558d9",type==="scatter"?predicted[i]:m.e[i]]];
+  if(H)dots.push([5,"#c2683f",type==="scatter"?human[i]:calcH[i]]);
+  dots.forEach(([dx,col,val])=>{
+   const x=X(a)+dx, y=Y(val);
+   ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();
+   ctx.strokeStyle="#fff";ctx.lineWidth=1.5;ctx.stroke();
+  });
+ });
+ ctx.fillStyle="#626980";ctx.font="12px system-ui";
+ ctx.textAlign="center";ctx.fillText("Correct answer",pad.l+pw/2,h-2);ctx.textAlign="left";
+ ctx.save();ctx.translate(12,pad.t+ph/2);ctx.rotate(-Math.PI/2);ctx.textAlign="center";ctx.fillText(type==="scatter"?"Prediction":"Error",0,0);ctx.restore();
+ plotCache[type]={pad,pw,ph,xmin,xmax,ymin,ymax,X,Y,w,h};
+}
+let dragSource="ai";
+function locate(canvas,type,event){
+ const r=canvas.getBoundingClientRect(),x=event.clientX-r.left,y=event.clientY-r.top;
+ let best=-1,dist=Infinity,src="ai";
+ const H=hasHuman(), errsA=calc(actual,predicted).e, errsH=H?calc(actual,human).e:[];
+ actual.forEach((a,i)=>{
+  const cands=[[a,predicted[i],errsA[i],"ai"]];
+  if(H)cands.push([a,human[i],errsH[i],"human"]);
+  cands.forEach(([av,pv,ev,s])=>{
+   const px=plotCache[type].X(av)+(H?(s==="ai"?-5:5):0);
+   const py=plotCache[type].Y(type==="scatter"?pv:ev);
+   const d=(px-x)**2+(py-y)**2;
+   if(d<dist){dist=d;best=i;src=s}
+  });
+ });
+ if(dist<26**2){dragSource=src;return best}
+ return -1;
+}
+function onPointerDown(event,type){
+ const canvas=event.currentTarget,i=locate(canvas,type,event);if(i<0)return;
+ drag={i,type,canvas};canvas.setPointerCapture(event.pointerId);event.preventDefault();
+}
+function onPointerMove(event){
+ if(!drag)return;const {i,type,canvas}=drag,plot=plotCache[type];
+ const r=canvas.getBoundingClientRect(),y=event.clientY-r.top;
+ const value=plot.ymax-(y-plot.pad.t)/plot.ph*(plot.ymax-plot.ymin);
+ const arr = dragSource==="human" ? human : predicted;
+ if(type==="scatter")arr[i]=value;
+ else arr[i]=actual[i]+value;
+ syncInputs();render();
+}
+function onPointerUp(){if(!drag)return;drag=null;commitBaseline();render()}
+$("scatter").addEventListener("pointerdown",e=>onPointerDown(e,"scatter"));
+$("residual").addEventListener("pointerdown",e=>onPointerDown(e,"residual"));
+window.addEventListener("pointermove",onPointerMove);
+window.addEventListener("pointerup",onPointerUp);
+window.addEventListener("resize",()=>{drawAll();if($("cmpChart"))renderCompare();if($("rCatChart"))drawRCharts();if($("hvChart"))renderHumanVsAI()});
+
+const presets={
+ flip:{a:[10,20,30,40,50,60],p:[10,20,30,40,50,70],h:[12,18,32,38,52,58]},
+ balanced:{a:[10,20,30,40,50,60],p:[12,18,31,37,53,59],h:[11,22,28,43,48,62]},
+ bias:{a:[10,20,30,40,50,60],p:[14,24,34,44,54,64],h:[15,25,35,45,55,65]},
+ noisy:{a:[10,20,30,40,50,60],p:[5,27,21,51,42,70],h:[4,25,23,48,45,68]},
+ aiBias:{a:[10,20,30,40,50,60],p:[15,25,35,45,55,65],h:[8,23,27,44,47,63]},
+ humanBias:{a:[10,20,30,40,50,60],p:[10,21,29,41,49,61],h:[16,26,36,46,56,66]},
+ outlier:{a:[10,20,30,40,50,60],p:[11,19,31,39,51,85],h:[10,21,29,41,49,61]},
+ scale:{a:[10,20,30,40,50,60],p:[5,10,15,20,25,30],h:[15,30,45,60,75,90]}
+};
+$("applyData").onclick=()=>applyData(parseList($("actual").value),parseList($("predicted").value),parseList($("human").value));
+$("reset").onclick=()=>{applyData(presets.balanced.a,presets.balanced.p,presets.balanced.h);$("shift").value=0;$("scale").value=1;$("shiftValue").textContent="0";$("scaleValue").textContent="1.00×"};
+$("loadPreset").onclick=()=>{const p=presets[$("preset").value];applyData(p.a,p.p,p.h)};
+$("addPoint").onclick=()=>applyData([...actual,mean(actual)],[...predicted,mean(predicted)],hasHuman()?[...human,mean(human)]:[]);
+$("clearHuman").onclick=()=>applyData(actual,predicted,[]);
+$("shift").oninput=()=>setText("shiftValue",$("shift").value);
+$("scale").oninput=()=>setText("scaleValue",Number($("scale").value).toFixed(2)+"×");
+$("applyTransform").onclick=()=>{
+ const shift=Number($("shift").value),scale=Number($("scale").value),m=calc(),b=m.Bias;
+ const base=m.e.map(e=>e-b);
+ applyData(actual,actual.map((a,i)=>a+b+base[i]*scale+shift),human);
+};
+$("applyBias").onclick=()=>{
+ const target=Number($("targetBias").value);if(!Number.isFinite(target))return;
+ const m=calc(),delta=target-m.Bias;applyData(actual,predicted.map(p=>p+delta),human);
+};
+$("applyMSE").onclick=()=>{
+ const target=Number($("targetMSE").value),m=calc();
+ if(!Number.isFinite(target)||target<0){$("mseStatus").className="notice warn";$("mseStatus").textContent="Target MSE must be a finite non-negative number.";return}
+ let errors;
+ if($("mseMode").value==="synthetic"){
+  errors=Array.from({length:actual.length},(_,i)=>(i%2===0?1:-1)*Math.sqrt(target));
+  if(errors.length%2===1)errors[errors.length-1]=Math.sqrt(target);
+  // Use equal-magnitude errors; odd sample sizes still reach the target MSE.
+  $("mseStatus").textContent="Synthetic scenario: errors were generated to reach the target MSE. This is an illustration, not a real model result.";
+ }else{
+  const bias=m.Bias,variance=m.SD**2;
+  if(target+1e-10<bias*bias){
+   $("mseStatus").className="notice warn";
+   $("mseStatus").textContent=`Impossible while preserving the current bias: MSE must be at least bias² = ${fmt(bias*bias)}. Change the bias target or use synthetic mode.`;
+   return;
+  }
+  if(variance<1e-12){
+   if(Math.abs(target-bias*bias)>1e-8){
+    $("mseStatus").className="notice warn";
+    $("mseStatus").textContent="All errors are identical, so there is no centered error pattern to rescale. Use synthetic mode or change the predictions first.";
+    return;
+   }
+   errors=m.e;
+  }else{
+   const newSD=Math.sqrt(Math.max(0,target-bias*bias));
+   errors=m.e.map(e=>bias+(e-bias)*newSD/m.SD);
+  }
+  $("mseStatus").textContent="Rescaled the centered error pattern while preserving the current mean error, where mathematically possible.";
+ }
+ $("mseStatus").className="notice";
+ applyData(actual,actual.map((a,i)=>a+errors[i]),human);
+ $("targetMSE").value=fmt(calc().MSE,5);
+};
+$("tolRange").oninput=()=>renderTolerance();
+document.addEventListener("click",e=>{const b=e.target.closest("[data-goto]");if(b)switchTab(b.dataset.goto)});
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+function switchTab(tab){
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===tab));
+ if(tab==="analyser")render();if(tab==="compare")renderCompare();
+ if(tab==="research"){renderResearch();setTimeout(()=>{drawRCharts();renderHumanVsAI()},0);}
+ if(tab==="experiments")renderExperiment();
+ if(tab==="guide"){renderGuide();renderChallenge();}
+}
+function currentTab(){const p=document.querySelector(".page.active");return p?p.id:"start"}
+function setMode(adv,rerender=true){
+ document.body.classList.toggle("advanced",adv);
+ $("modeSimple").classList.toggle("on",!adv);$("modeAdv").classList.toggle("on",adv);
+ $("modeSimple").setAttribute("aria-pressed",String(!adv));$("modeAdv").setAttribute("aria-pressed",String(adv));
+ try{localStorage.setItem("mathBiasMode",adv?"advanced":"simple")}catch(e){}
+ if(!rerender)return;
+ const t=currentTab();
+ if(t==="experiments")renderMetrics("expMetrics");
+ else if(t==="guide")renderGuide();
+ else switchTab(t);
+}
+$("modeSimple").onclick=()=>setMode(false);
+$("modeAdv").onclick=()=>setMode(true);
+
+const FAIR_ACTUAL=[10,20,30,40,50,60,70,80], FAIR_HUMAN=[12,18,32,38,52,58,72,78];
+const WIN_LABEL={MAE:"mean absolute error",MedAE:"median absolute error",RMSE:"RMSE",MaxAE:"maximum error",Bias:"bias (closer to zero wins)"};
+const WIN_SHORT={MedAE:"Median",MAE:"MAE",RMSE:"RMSE",MaxAE:"Max",Bias:"Bias"};
+const experiments=[
+ {id:"winner",name:"Pick the Winner",q:"Does the winner change when you change the formula?",
+  learn:"On the same data, MAE and the median crown the AI, while RMSE, the maximum error and bias crown the humans. The data never changed, only the question asked of it.",
+  controls:`<label for="eMetric">Judge with this formula</label><select id="eMetric"><option value="MAE">Mean absolute error (typical miss)</option><option value="MedAE">Median absolute error (middle miss)</option><option value="RMSE">RMSE (punishes big misses)</option><option value="MaxAE">Maximum error (worst miss)</option><option value="Bias">Bias (average lean)</option></select><p class="small" style="margin-top:8px">Correct answers 10&ndash;60. The AI is perfect five times and misses once by 10; the humans miss by 2 every time.</p>`},
+ {id:"fair",name:"Fairness Lab",q:"Can an AI win overall while treating one group worse?",
+  learn:"The overall MAE averages everyone together, so large errors on a small group barely move it. Splitting the errors by group shows who is actually paying for the mistakes.",
+  controls:`<label for="eGap">AI's error on Group B: <span id="eGapV">6</span></label><input class="range" id="eGap" type="range" min="0" max="16" step="1" value="6"><p class="small" style="margin-top:8px">Observations 1&ndash;6 are Group A and observations 7&ndash;8 are Group B. The AI is perfect on Group A. The humans miss everyone by 2.</p>`},
+ {id:"shift",name:"Bias Lab",q:"What happens when every prediction shifts by the same amount?",
+  learn:"A constant shift adds the same amount to every error. The mean error moves by exactly that amount; MAE and MSE can rise or fall depending on where the errors started.",
+  controls:`<label for="eShift">Shift amount</label><input class="range" id="eShift" type="range" min="-10" max="10" step=".5" value="3">`},
+ {id:"same",name:"Same Score",q:"Can two error patterns have the same MSE but tell different stories?",
+  learn:"Yes. Errors [−2, −2, +2, +2] and [0, 0, 0, +4] both have MSE 4. But A has mean error 0 while B has mean error 1, and B puts all of its error into one larger miss.",
+  controls:`<div class="formula">A: −2, −2, +2, +2<br>B: 0, 0, 0, +4</div>`},
+ {id:"outlier",name:"Outlier Trap",q:"How does one unusually large error affect squared-error measures?",
+  learn:"A large error adds its square to MSE. Raising one error from 2 to 10 raises its contribution from 4 to 100.",
+  controls:`<label for="eOutlier">Outlier error</label><input class="range" id="eOutlier" type="range" min="1" max="25" step="1" value="15">`},
+ {id:"hidden",name:"Hidden Pattern",q:"Can a zero mean error hide a systematic pattern?",
+  learn:"Yes. Both patterns have a mean error of exactly zero, so bias reports nothing wrong. But the trending pattern runs low on small values and high on large ones, which shows on the residual plot as a slant.",
+  controls:`<div class="formula">Balanced (humans): −2, +2, −2, +2<br>Trending (AI): −3, −1, +1, +3</div>`},
+ {id:"scale",name:"Scale Challenge",q:"What happens when predictions are consistently scaled too high or too low?",
+  learn:"Scaling the predictions changes every error by a different amount: larger correct answers get larger errors.",
+  controls:`<label for="eScale">Prediction scale factor</label><input class="range" id="eScale" type="range" min="0" max="2.5" step=".1" value="1.5">`}
+];
+function renderExperiment(capture=true){
+ $("experimentButtons").innerHTML=experiments.map((x,i)=>`<button class="btn ${i===activeExperiment?"selected":""}" data-exp="${i}">${i+1}. ${x.name}</button>`).join("");
+ $("experimentButtons").querySelectorAll("button").forEach(b=>b.onclick=()=>{activeExperiment=+b.dataset.exp;renderExperiment(false)});
+ const x=experiments[activeExperiment];
+ $("expTag").textContent=`EXPERIMENT ${activeExperiment+1} OF ${experiments.length}`;
+ setText("expTitle",x.name);setText("expQuestion",x.q);$("expControls").innerHTML=x.controls;
+ setText("expLearning",x.learn);setText("expExplanation","Press Apply experiment to see the effect.");
+ renderMetrics("expMetrics");
+ if(capture)startExperiment={a:[...actual],p:[...predicted],h:[...human]};
+ $("runExperiment").onclick=runExperiment;
+ if($("eMetric"))$("eMetric").onchange=runExperiment;
+ if($("eGap"))$("eGap").oninput=()=>{setText("eGapV",$("eGap").value);runExperiment()};
+}
+function winnerOf(k,a,h){
+ const av=k==="Bias"?Math.abs(a[k]):a[k], hv=k==="Bias"?Math.abs(h[k]):h[k];
+ return Math.abs(av-hv)<1e-9?"Tie":(av<hv?"AI":"Humans");
+}
+function runExperiment(){
+ const id=experiments[activeExperiment].id;
+ if(id==="winner"){
+  const p=presets.flip;applyData(p.a,p.p,p.h);
+  const k=$("eMetric").value,a=calc(actual,predicted),h=calc(actual,human),w=winnerOf(k,a,h);
+  const val=(m)=>fmt(k==="Bias"?Math.abs(m[k]):m[k]);
+  const all=["MedAE","MAE","RMSE","MaxAE","Bias"].map(x=>WIN_SHORT[x]+" &rarr; "+winnerOf(x,a,h)).join(" &middot; ");
+  $("expExplanation").innerHTML=`<strong>Judged by ${WIN_LABEL[k]}: ${w==="Tie"?"a tie":w+(w==="AI"?" wins":" win")}.</strong> AI ${val(a)}, humans ${val(h)}. Pick another formula and watch the winner change.<p class="small" style="margin:8px 0 0">${all}</p>`;
+ }
+ if(id==="fair"){
+  const g=Number($("eGap").value);
+  applyData(FAIR_ACTUAL,FAIR_ACTUAL.map((v,i)=>i===6?v+g:i===7?v-g:v),FAIR_HUMAN);
+  const all=(src)=>calc(actual,src).MAE;
+  const grp=(src,lo,hi)=>calc(actual.slice(lo,hi),src.slice(lo,hi)).MAE;
+  const aAll=all(predicted), hAll=all(human), aA=grp(predicted,0,6), hA=grp(human,0,6), aB=grp(predicted,6,8), hB=grp(human,6,8);
+  let msg;
+  if(aB<=hB+1e-9) msg=`With a Group B error of ${g}, the AI is at least as good as the humans for <strong>both</strong> groups. Now drag the slider up.`;
+  else if(aAll<hAll-1e-9) msg=`Overall the AI <strong>wins</strong> (MAE ${fmt(aAll)} vs ${fmt(hAll)}). Yet Group B gets errors <strong>${fmt(aB/hB)}&times;</strong> larger from the AI than from the humans. The overall average hides it.`;
+  else if(Math.abs(aAll-hAll)<1e-9) msg=`Overall it is a tie (MAE ${fmt(aAll)} each), even though Group B's errors from the AI are ${fmt(aB/hB)}&times; larger.`;
+  else msg=`Now the AI loses overall too (MAE ${fmt(aAll)} vs ${fmt(hAll)}). At smaller Group B errors, the overall number hid the problem.`;
+  $("expExplanation").innerHTML=`<div class="table-wrap"><table class="flip"><thead><tr><th>Who</th><th>AI MAE</th><th>Human MAE</th></tr></thead><tbody>
+   <tr><td>Everyone (overall)</td><td>${fmt(aAll)}</td><td>${fmt(hAll)}</td></tr>
+   <tr><td>Group A (observations 1&ndash;6)</td><td>${fmt(aA)}</td><td>${fmt(hA)}</td></tr>
+   <tr><td>Group B (observations 7&ndash;8)</td><td>${fmt(aB)}</td><td>${fmt(hB)}</td></tr></tbody></table></div><p style="margin:10px 0 0">${msg}</p>`;
+ }
+ if(id==="shift"){const s=Number($("eShift").value);applyData(actual,predicted.map(p=>p+s),human)}
+ if(id==="same"){
+  applyData([10,20,30,40],[8,18,32,42],[9,21,31,41]);
+  $("expExplanation").innerHTML="Pattern A: MSE = (4 + 4 + 4 + 4) / 4 = 4, mean error = (−2 − 2 + 2 + 2) / 4 = 0. Pattern B: MSE = (0 + 0 + 0 + 16) / 4 = 4, mean error = (0 + 0 + 0 + 4) / 4 = 1. Same MSE, different means, different stories. The Analyser now holds pattern A.";
+ }
+ if(id==="outlier"){const o=Number($("eOutlier").value);applyData([10,20,30,40],[10,20,30,40+o],[11,19,29,39]);}
+ if(id==="hidden"){
+  applyData([10,20,30,40],[7,19,31,43],[8,22,28,42]);
+  $("expExplanation").innerHTML="AI errors −3, −1, +1, +3 sum to 0, so the mean error is exactly zero. But MSE is "+fmt(calc(actual,predicted).MSE)+
+   " and the errors climb steadily as the correct answers rise: too low on small answers, too high on large ones. The humans' −2, +2, −2, +2 also has mean zero, with no direction in its mistakes. Compare the two on the Analyser's residual plot.";
+ }
+ if(id==="scale"){const s=Number($("eScale").value);applyData(actual,actual.map(a=>a*s),human)}
+ if(["shift","outlier","scale"].includes(id))$("expExplanation").textContent=experiments[activeExperiment].learn;
+ renderMetrics("expMetrics");
+}
+$("expReset").onclick=()=>{applyData(startExperiment.a,startExperiment.p,startExperiment.h);renderExperiment(false)};
+const challenges=[
+ {title:"Errors that cancel",q:"A model's errors are −5, −2, +2, +5. What is its mean error?",opts:["−2.5","0","3.5"],correct:1,why:"The sum is −5 − 2 + 2 + 5 = 0. Dividing by four gives mean error 0. The MAE is still 3.5, so zero bias does not mean perfect predictions."},
+ {title:"The outlier effect",q:"Which metric is generally more sensitive to one very large error?",opts:["MSE","Mean error only","Neither"],correct:0,why:"MSE squares each error. A magnitude-10 error contributes 100 before averaging, while a magnitude-2 error contributes only 4."},
+ {title:"Same score, different pattern",q:"Errors A = [−2, −2, +2, +2] and B = [0, 0, 0, +4]. Which statement is true?",opts:["A has lower MSE","B has lower MSE","Both have MSE 4"],correct:2,why:"A has squared errors [4,4,4,4], averaging 4. B has [0,0,0,16], also averaging 4. Their error distributions differ."},
+ {title:"MAPE and zero",q:"One actual value is zero. What happens to ordinary MAPE?",opts:["It is always zero","It is undefined","It must equal 100%"],correct:1,why:"MAPE divides each absolute error by its actual value. Division by zero is undefined, so ordinary MAPE cannot be calculated if an actual value is zero."},
+ {title:"Correlation versus accuracy",q:"Predictions have a strong positive correlation with actual values but are always twice as large. What should you conclude?",opts:["They must be accurate","Correlation alone doesn't establish agreement","MSE must be zero"],correct:1,why:"Correlation measures linear association. Predictions can track the ordering of actual values closely while still being systematically mis-scaled and inaccurate."},
+ {title:"Choosing for safety",q:"A hospital AI suggests medicine doses, and even one large mistake could be dangerous. Which measure best exposes that risk?",opts:["Median absolute error","Mean error (bias)","Maximum absolute error"],correct:2,why:"The maximum error reports the single worst miss directly. The median ignores the worst cases, and bias lets positive and negative errors cancel. RMSE would also be a sensible choice, because squaring makes large misses count heavily."},
+ {title:"Two verdicts, one dataset",q:"On the same data, the AI has the lower MAE but the humans have the lower RMSE. What is the best conclusion?",opts:["One of the calculations must be wrong","The AI is better, because MAE is the standard","The AI's typical miss is smaller, but it has at least one larger miss"],correct:2,why:"Both can be true at once. MAE averages the size of the misses; RMSE squares them first, so one large miss raises it sharply. The two formulas answer different questions."},
+ {title:"Who pays for the errors?",q:"An AI has a lower overall MAE than humans, but almost all of its large errors fall on one small group. What does the overall MAE hide?",opts:["Nothing: a lower MAE means the AI is fairer","That one group receives much worse predictions","That the AI has a positive bias"],correct:1,why:"An overall average mixes every group together, so large errors on a small group barely move it. Computing the error separately for each group shows who is paying for the mistakes. Try it in the Fairness Lab experiment."}
+];
+function renderChallenge(){
+ const c=challenges[challengeIndex];
+ setText("challengeCount",`CHALLENGE ${challengeIndex+1} OF ${challenges.length}`);
+ setText("challengeTitle",c.title);setText("challengeQuestion",c.q);
+ $("challengeOptions").innerHTML=c.opts.map((o,i)=>`<label class="option"><input type="radio" name="answer" value="${i}"><span>${esc(o)}</span></label>`).join("");
+ $("answerFeedback").innerHTML="";
+ $("previousChallenge").disabled=challengeIndex===0;
+ $("nextChallenge").disabled=challengeIndex===challenges.length-1;
+}
+$("checkAnswer").onclick=()=>{
+ const c=challenges[challengeIndex],sel=document.querySelector('input[name="answer"]:checked');
+ if(!sel){$("answerFeedback").innerHTML='<div class="notice warn">Choose an answer first.</div>';return}
+ const ok=+sel.value===c.correct;
+ $("answerFeedback").innerHTML=`<div class="answer"><strong>${ok?"Correct!":"Not quite."}</strong><p>${esc(c.why)}</p></div>`;
+};
+$("previousChallenge").onclick=()=>{challengeIndex=Math.max(0,challengeIndex-1);renderChallenge()};
+$("nextChallenge").onclick=()=>{challengeIndex=Math.min(challenges.length-1,challengeIndex+1);renderChallenge()};
+$("openAnalyser").onclick=()=>switchTab("analyser");
+
+function guideExtras(){
+ return "<article><h3>Which formula answers which question?</h3>"+
+  "<p><strong>How far off, typically?</strong> MAE, median error.</p>"+
+  "<p><strong>How bad are the worst cases?</strong> RMSE, maximum error.</p>"+
+  "<p><strong>Is it aimed correctly?</strong> Bias.</p>"+
+  "<p class='adv'><strong>Does it follow the trend?</strong> Correlation, R&sup2; &mdash; both can look excellent on badly scaled predictions.</p>"+
+  "<p class='adv'><strong>How often is it good enough?</strong> The tolerance measure on the Analyser.</p>"+
+  "<p>Each formula answers one question and is silent on the rest, so one score is a poor summary.</p></article>"+
+  "<article><h3>What no formula can tell you</h3>"+
+  "<p>These formulas compare <strong>answers</strong>, not <strong>reasoning</strong>: a right answer reached by a wrong method scores perfectly.</p>"+
+  "<p>They show <em>that</em> errors are large, not <em>why</em>, and they cannot tell you whether the test questions were representative.</p></article>";
+}
+function renderGuide(){
+ $("guideCards").innerHTML=guideExtras()+shownKeys().map(k=>{
+  const m=metricInfo[k];
+  return `<article><h3>${m.name}</h3><div class="formula">${m.formula}</div><p><strong>Measures:</strong> ${m.meaning}</p><p><strong>Blind spot:</strong> ${m.limit}</p></article>`;
+ }).join("");
+}
+
+const CMP_METRICS=[["MAE","Mean Absolute Error"],["MSE","Mean Squared Error"],["RMSE","Root Mean Squared Error"],["Bias","Mean Error / Bias"],["MedAE","Median Absolute Error"],["MaxAE","Maximum Absolute Error"],["SD","Standard Deviation of Errors"],["Corr","Correlation"],["R2","Coefficient of Determination"]];
+
+function cmpShown(){return isAdv()?CMP_METRICS:CMP_METRICS.filter(([k])=>SIMPLE_KEYS.includes(k))}
+
+function withinTolerance(pred, tol){
+ const n=actual.length;
+ if(!n) return null;
+ let hit=0;
+ for(let i=0;i<n;i++){
+  const av=actual[i];
+  if(av===0){ if(Math.abs(pred[i])<1e-9) hit++; continue; }
+  if(Math.abs((pred[i]-av)/av)<=tol/100) hit++;
+ }
+ return hit/n*100;
+}
+function renderTolerance(){
+ const tol=Number($("tolRange").value);
+ $("tolValue").textContent=tol+"%";
+ const H=hasHuman(), aPct=withinTolerance(predicted,tol), hPct=H?withinTolerance(human,tol):null;
+ const n=actual.length;
+ let zeros=actual.filter(v=>v===0).length;
+ let negatives=actual.filter(v=>v<0).length;
+ let tiny=actual.filter(v=>v!==0&&Math.abs(v)<1).length;
+ const cells=H?[["AI within tolerance",aPct,"#6558d9"],["Humans within tolerance",hPct,"#c2683f"]]:[["AI within tolerance",aPct,"#6558d9"]];
+ $("tolMetrics").innerHTML=cells.map(([label,pct])=>{
+  const v=(pct===null)?"N/A":pct.toFixed(1)+"%";
+  const cnt=(pct===null)?"":Math.round(pct/100*n)+" of "+n;
+  return `<div class="metric"><div class="name">${label}</div><div class="value">${v}</div><div class="unit">${cnt||" "}</div></div>`;
+ }).join("");
+ let note=`Counts a prediction as good enough when it is within ${tol}% of the correct answer. `;
+ if(!H) note+=(aPct===null?'This cannot be computed for every observation.':'The AI is good enough '+aPct.toFixed(0)+'% of the time.');
+ else note+=(aPct!==null&&hPct!==null)
+  ? (Math.abs(aPct-hPct)<1e-9?'Both sources are equally often good enough.':(aPct>hPct?'The AI is good enough more often.':'The humans are good enough more often.'))
+  : 'This cannot be computed for every observation.';
+ if(zeros) note+=` ${zeros} correct answer(s) are zero; those count only if the prediction is also zero.`;
+ if(negatives) note+=` ${negatives} correct answer(s) are negative, so read the percentages with care.`;
+ if(tiny) note+=` ${tiny} correct answer(s) are below 1, where small differences become large percentages.`;
+ $("tolNote").textContent=note;
+}
+
+function renderShared(){
+ const canvas=$("shareChart");
+ const rect=canvas.getBoundingClientRect();
+ const a=calc(actual,predicted), hm=calc(actual,human);
+ const corr=errorCorrelation();
+
+ if(rect.width){
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);
+  const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
+  const w=rect.width,h=rect.height,pad={l:52,r:18,t:18,b:40};
+  const pw=w-pad.l-pad.r, ph=h-pad.t-pad.b;
+  const xs=a.e, ys=hm.e;
+  let lo=Math.min(...xs,...ys,0), hi=Math.max(...xs,...ys,0);
+  if(lo===hi){lo-=1;hi+=1}
+  const ex=(hi-lo)*0.15; lo-=ex; hi+=ex;
+  const X=v=>pad.l+(v-lo)/(hi-lo)*pw;
+  const Y=v=>pad.t+(hi-v)/(hi-lo)*ph;
+
+  ctx.clearRect(0,0,w,h);
+  ctx.font="11px system-ui";ctx.strokeStyle="#e7e9f0";ctx.fillStyle="#777d90";
+  for(let j=0;j<=4;j++){
+   const y=pad.t+ph*j/4;
+   ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();
+   ctx.fillText(fmt(hi-(hi-lo)*j/4,1),4,y+4);
+   const x=pad.l+pw*j/4;
+   ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,h-pad.b);ctx.stroke();
+   ctx.fillText(fmt(lo+(hi-lo)*j/4,1),x-10,h-13);
+  }
+  // quadrant tints
+  const zx=X(0), zy=Y(0);
+  ctx.fillStyle="rgba(22,132,91,0.05)";
+  ctx.fillRect(zx,pad.t,w-pad.r-zx,zy-pad.t);
+  ctx.fillRect(pad.l,zy,zx-pad.l,h-pad.b-zy);
+  ctx.fillStyle="rgba(194,78,85,0.05)";
+  ctx.fillRect(pad.l,pad.t,zx-pad.l,zy-pad.t);
+  ctx.fillRect(zx,zy,w-pad.r-zx,h-pad.b-zy);
+
+  ctx.strokeStyle="#a5a9ba";ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pad.l,zy);ctx.lineTo(w-pad.r,zy);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(zx,pad.t);ctx.lineTo(zx,h-pad.b);ctx.stroke();
+
+  xs.forEach((xv,i)=>{
+   ctx.beginPath();ctx.arc(X(xv),Y(ys[i]),6,0,Math.PI*2);
+   ctx.fillStyle="#6558d9";ctx.fill();
+   ctx.strokeStyle="#fff";ctx.lineWidth=1.5;ctx.stroke();
+  });
+  ctx.fillStyle="#626980";ctx.font="12px system-ui";
+  ctx.textAlign="center";ctx.fillText("AI error",pad.l+pw/2,h-2);ctx.textAlign="left";
+  ctx.save();ctx.translate(13,h/2+20);ctx.rotate(-Math.PI/2);ctx.fillText("Human error",0,0);ctx.restore();
+ }
+
+ // quadrant counts
+ const dc=dirCounts(a.e,hm.e), same=dc.same, opposite=dc.opposite, exact=dc.bothExact;
+ $("shareReadout").innerHTML=`<p class="small" style="margin-top:10px"><strong>Same direction:</strong> ${same} &middot; <strong>Opposite:</strong> ${opposite} &middot; <strong>Both exact:</strong> ${exact}${dc.oneExact?` &middot; <strong>One exact:</strong> ${dc.oneExact}`:""}. `+
+  (corr===null?"The error patterns cannot be correlated here.":`Error-pattern correlation: ${fmt(corr)} (near +1: they miss the same way; near 0: unrelated).`)+
+  ` With ${actual.length} observations this describes the sample only.</p>`;
+}
+
+// One rule for "same direction": both errors must be non-zero. If only one source is exact, it is neither.
+function dirLabel(ae,he){
+ const za=Math.abs(ae)<1e-9, zh=Math.abs(he)<1e-9;
+ if(za&&zh) return "both exact";
+ if(za||zh) return "one exact";
+ return (ae>0)===(he>0)?"same direction":"opposite";
+}
+function dirCounts(ea,eh){
+ const c={same:0,opposite:0,bothExact:0,oneExact:0};
+ ea.forEach((ae,i)=>{const l=dirLabel(ae,eh[i]);
+  if(l==="same direction")c.same++;else if(l==="opposite")c.opposite++;else if(l==="both exact")c.bothExact++;else c.oneExact++;});
+ return c;
+}
+function renderBanners(){
+ const n=actual.length;
+ const msg = n<12
+  ? `Only <strong>${n} observations</strong>: treat every figure as an illustration, not a finding.`
+  : n<30 ? `${n} observations: patterns are suggestive, not conclusive.`
+  : `${n} observations: reasonable footing, though representativeness still matters.`;
+ if($("nBannerCompare")){ $("nBannerCompare").classList.add("show"); $("nPillCompare").textContent="n = "+n; $("nTextCompare").innerHTML=msg; }
+}
+
+
+function describe(arr){
+ const n=arr.length;
+ if(!n) return null;
+ const s=[...arr].sort((x,y)=>x-y);
+ return {
+  n,
+  mean:mean(arr),
+  median:median(arr),
+  min:s[0],
+  max:s[s.length-1],
+  q1:s[Math.floor((n-1)*0.25)],
+  q3:s[Math.floor((n-1)*0.75)]
+ };
+}
+function renderSummary(){
+ const el=$("dataSummary");
+ if(!el) return;
+ const cols=[
+  ["Correct answers", describe(actual), "ac"],
+  ["AI predictions", describe(predicted), "ai"],
+  ["Human predictions", describe(human), "hu"]
+ ].filter(c=>c[2]!=="hu"||hasHuman());
+ el.innerHTML=cols.map(([label,d,cls])=>{
+  if(!d) return `<div class="sumcol ${cls}"><h4>${label}</h4><div class="sumrow"><span class="k">no data</span><span class="v">—</span></div></div>`;
+  const rows=[
+   ["Mean",fmt(d.mean,3)],
+   ["Median",fmt(d.median,3)],
+   ["Smallest",fmt(d.min,3)],
+   ["Largest",fmt(d.max,3)],
+   ["Range",fmt(d.max-d.min,3)]
+  ];
+  return `<div class="sumcol ${cls}"><h4>${label}</h4>`+
+   rows.map(([k,v])=>`<div class="sumrow"><span class="k">${k}</span><span class="v">${v}</span></div>`).join("")+
+   `</div>`;
+ }).join("");
+
+ // note: flag skew where mean and median disagree
+ const dA=describe(actual), dP=describe(predicted), dH=describe(human);
+ const notes=[];
+ const skewOf=(d)=>{ if(!d) return 0; const span=Math.abs(d.max-d.min)||1; return Math.abs(d.mean-d.median)/span; };
+ const skA=skewOf(dA), skP=skewOf(dP), skH=skewOf(dH);
+ const worst=Math.max(skA,skP,skH);
+ if(worst>0.06){
+  const which=[["correct answers",skA],["AI predictions",skP]].concat(hasHuman()?[["human predictions",skH]]:[])
+   .filter(([,s])=>s>0.06).map(([w])=>w);
+  notes.push("Mean and median differ most in "+which.join(" and ")+", so those values are unevenly spread.");
+ } else {
+  notes.push("Mean and median are close in every column, so the values are evenly spread.");
+ }
+ if(dA&&dP&&!dH){
+  const gP=dP.mean-dA.mean;
+  notes.push(Math.abs(gP)<1e-9?"The AI's average matches the correct average.":"The AI's average is "+fmt(Math.abs(gP))+(gP>0?" above":" below")+" the correct average.");
+ }
+ if(dA&&dP&&dH){
+  const gP=Math.abs(dP.mean-dA.mean), gH=Math.abs(dH.mean-dA.mean);
+  notes.push(gP<gH?"The AI's average sits closer to the correct average.":gH<gP?"The humans' average sits closer to the correct average.":"Both sources share the same average.");
+ }
+ notes.push("A matching average can still be wrong point by point.");
+ $("sumNote").textContent=notes.join(" ");
+}
+
+function compareGuide(){
+ const a=calc(actual,predicted), hm=calc(actual,human);
+ return "<h4>Choosing a formula is choosing what matters</h4>"+
+  "<p><strong>MAE</strong> is the typical miss. <strong>RMSE and the maximum error</strong> show how bad the worst misses are. <strong>Bias</strong> shows whether misses lean one way. "+
+  "Which source is “better” depends on which of these the task cares about &mdash; a judgement people make, not the data.</p>"+
+  "<p class='adv'><strong>The correlation trap:</strong> predictions that are always exactly half the right answer have a perfect correlation of 1, yet every one is wrong. "+
+  "Here correlation is "+fmt(a.Corr)+" for the AI and "+fmt(hm.Corr)+" for the humans.</p>";
+}
+function renderCompare(){
+ const H=hasHuman();
+ $("cmpEmpty").style.display=H?"none":"";
+ $("cmpBody").style.display=H?"":"none";
+ if(!H)return;
+ const a=calc(actual,predicted), hm=calc(actual,human), list=cmpShown();
+ let aWins=0,hWins=0;
+ $("cmpMetrics").innerHTML=list.map(([k,label])=>{
+  const hib=(k==="Corr"||k==="R2"), isBias=(k==="Bias");
+  const av=isBias?Math.abs(a[k]):a[k], hv=isBias?Math.abs(hm[k]):hm[k];
+  let win="tie";
+  if(Number.isFinite(av)&&Number.isFinite(hv)&&Math.abs(av-hv)>1e-9) win=(hib?av>hv:av<hv)?"ai":"human";
+  if(win==="ai")aWins++; if(win==="human")hWins++;
+  const who=win==="ai"?"AI":"Human";
+  const wl=win==="tie"?"equal":isBias?who+" closer to zero":hib?who+" higher (better)":who+" smaller error";
+  const disp=isBias?`${fmt(av)} <small>/ ${fmt(hv)}</small>`:`${fmt(a[k])} <small>/ ${fmt(hm[k])}</small>`;
+  return `<div class="metric"><div class="name">${label}</div><div class="value">${disp}</div><div class="unit">AI / Human${isBias?" (size of lean)":""}</div><div class="win ${win}">${wl}</div></div>`;
+ }).join("");
+ const dir=Math.abs(a.Bias)>Math.abs(hm.Bias)*1.5
+  ? "The AI leans further from zero ("+(a.Bias>0?"too high":"too low")+" on average)."
+  : Math.abs(hm.Bias)>Math.abs(a.Bias)*1.5
+   ? "The humans lean further from zero ("+(hm.Bias>0?"too high":"too low")+" on average)."
+   : "Neither source leans clearly further than the other.";
+ const sdNote=a.SD>hm.SD*1.2?"The AI's errors are more scattered.":hm.SD>a.SD*1.2?"The humans' errors are more scattered.":"Both scatter their errors by a similar amount.";
+ const maxNote=a.MaxAE>hm.MaxAE*1.5?"The AI's worst miss is much larger than the humans'.":hm.MaxAE>a.MaxAE*1.5?"The humans' worst miss is much larger than the AI's.":"Neither has a dramatically worse single miss.";
+ $("cmpVerdict").innerHTML=`<div class="notice"><strong>Tally:</strong> AI ahead on ${aWins} of ${list.length} measures, humans on ${hWins}.</div><p>${esc(dir)}</p><p>${esc(sdNote)}</p><p>${esc(maxNote)}</p><div class="notice warn">A tally is not a verdict: it treats every measure as equally important. Which source is better depends on which mistakes are costly for the task.</div>`;
+ drawCompareChart(a,hm);
+ $("cmpGuide").innerHTML=compareGuide();
+ renderPatterns();
+ if(isAdv())renderShared();
+ renderBanners();
+}
+function drawCompareChart(a,hm){
+ const canvas=$("cmpChart"), rect=canvas.getBoundingClientRect(); if(!rect.width)return;
+ const dpr=window.devicePixelRatio||1; canvas.width=Math.round(rect.width*dpr); canvas.height=Math.round(rect.height*dpr);
+ const ctx=canvas.getContext("2d"); ctx.scale(dpr,dpr);
+ const w=rect.width,h=rect.height,pad={l:64,r:16,t:16,b:72}; const pw=w-pad.l-pad.r, ph=h-pad.t-pad.b;
+ const show=["MAE","RMSE","MedAE","MaxAE"];
+ const max=Math.max(...show.flatMap(k=>[a[k],hm[k]]).filter(Number.isFinite),1);
+ ctx.clearRect(0,0,w,h); ctx.font="11px system-ui"; ctx.strokeStyle="#e7e9f0"; ctx.fillStyle="#777d90";
+ for(let j=0;j<=4;j++){ const y=pad.t+ph*j/4; ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke(); ctx.fillText(fmt(max-max*j/4,2),4,y+4); }
+ const groupW=pw/show.length, barW=Math.min(34,groupW/3.2);
+ show.forEach((k,i)=>{ const cx=pad.l+groupW*i+groupW/2;
+  const av=Number.isFinite(a[k])?a[k]:0, hv=Number.isFinite(hm[k])?hm[k]:0;
+  ctx.fillStyle="#6558d9"; ctx.fillRect(cx-barW-4,pad.t+ph-av/max*ph,barW,av/max*ph);
+  ctx.fillStyle="#c2683f"; ctx.fillRect(cx+4,pad.t+ph-hv/max*ph,barW,hv/max*ph);
+  ctx.fillStyle="#626980"; ctx.textAlign="center"; ctx.fillText(k,cx,pad.t+ph+18);
+  ctx.fillText(fmt(av,1),cx-barW/2-4,pad.t+ph+34); ctx.fillText(fmt(hv,1),cx+barW/2+4,pad.t+ph+34); ctx.textAlign="left"; });
+ ctx.fillStyle="#777d90"; ctx.fillText("error size — shorter is better",pad.l,pad.t+ph+58);
+}
+function renderPatterns(){
+ const a=calc(actual,predicted), hm=calc(actual,human), n=actual.length;
+ const dc=dirCounts(a.e,hm.e), sameDir=dc.same, opposite=dc.opposite, bothExact=dc.bothExact;
+ $("patternTable").innerHTML=actual.map((v,i)=>{
+  const ae=a.e[i], he=hm.e[i];
+  const dir='<span class="muted">'+dirLabel(ae,he)+'</span>';
+  const closer=Math.abs(ae)<Math.abs(he)?'<span class="better">AI</span>':Math.abs(he)<Math.abs(ae)?'<span class="better">Human</span>':'<span class="muted">tie</span>';
+  return `<tr><td>${i+1}</td><td>${fmt(v)}</td><td>${fmt(ae)}</td><td>${fmt(he)}</td><td>${dir}</td><td>${closer}</td><td>${fmt(ae-he)}</td></tr>`;
+ }).join("");
+ const corr=errorCorrelation();
+ $("agreement").innerHTML=`<p class="small" style="margin-top:10px"><strong>Same direction:</strong> ${sameDir} of ${n} &middot; <strong>Opposite:</strong> ${opposite} &middot; <strong>Both exact:</strong> ${bothExact}${dc.oneExact?` &middot; <strong>One exact:</strong> ${dc.oneExact}`:""}. ${sameDir+opposite===0?"":sameDir>opposite?"They tend to miss the same way, which may mean some questions are simply harder.":"They tend to miss in opposite directions."}</p>`;
+ drawDirChart(a,hm);
+}
+function drawDirChart(a,hm){
+ const canvas=$("dirChart"), rect=canvas.getBoundingClientRect(); if(!rect.width)return;
+ const dpr=window.devicePixelRatio||1; canvas.width=Math.round(rect.width*dpr); canvas.height=Math.round(rect.height*dpr);
+ const ctx=canvas.getContext("2d"); ctx.scale(dpr,dpr);
+ const w=rect.width,h=rect.height,pad={l:150,r:40,t:20,b:20}; const pw=w-pad.l-pad.r, ph=h-pad.t-pad.b;
+ const over=e=>e.filter(x=>x>1e-9).length, under=e=>e.filter(x=>x<-1e-9).length;
+ const rows=[["AI overpredicted",over(a.e),"#6558d9"],["Human overpredicted",over(hm.e),"#c2683f"],["AI underpredicted",under(a.e),"#6558d9"],["Human underpredicted",under(hm.e),"#c2683f"]];
+ const max=Math.max(...rows.map(r=>r[1]),1);
+ ctx.clearRect(0,0,w,h); ctx.font="12px system-ui";
+ rows.forEach((r,i)=>{ const y=pad.t+ph*(i+.5)/rows.length; const barW=r[1]/max*(pw-40);
+  ctx.fillStyle=r[2]; ctx.fillRect(pad.l,y-10,Math.max(barW,0),20);
+  ctx.fillStyle="#626980"; ctx.textAlign="right"; ctx.fillText(r[0],pad.l-8,y+4); ctx.textAlign="left";
+  ctx.fillText(String(r[1]),pad.l+Math.max(barW,0)+8,y+4); });
+}
+
+
+let ROWS=[];            // validated rows
+let IS_SAMPLE=false;    // true while the built-in example is loaded
+let RVALID=false;       // whether the current data passed validation
+
+const SAMPLE_CSV=[
+ "participant,problem,category,source,correct",
+ "P01,1,fractions,human,1","P01,2,arithmetic,human,1","P01,3,fractions,human,0","P01,4,arithmetic,human,1",
+ "P02,1,fractions,human,0","P02,2,arithmetic,human,1","P02,3,fractions,human,0","P02,4,arithmetic,human,0",
+ "P03,1,fractions,human,1","P03,2,arithmetic,human,0","P03,3,fractions,human,1","P03,4,arithmetic,human,1",
+ "P04,1,fractions,human,0","P04,2,arithmetic,human,1","P04,3,fractions,human,0","P04,4,arithmetic,human,1",
+ "P05,1,fractions,human,1","P05,2,arithmetic,human,1","P05,3,fractions,human,0","P05,4,arithmetic,human,1",
+ "P06,1,fractions,human,0","P06,2,arithmetic,human,0","P06,3,fractions,human,0","P06,4,arithmetic,human,1",
+ ",1,fractions,ai,1",",2,arithmetic,ai,1",",3,fractions,ai,0",",4,arithmetic,ai,1"
+].join("\n");
+
+// Split one line on a delimiter, honouring "quoted fields" so that a comma
+// or semicolon inside quotes does not break the row. "" inside quotes is a literal quote.
+function splitDelimited(line, D){
+ const cells=[];let cur="";let inQ=false;
+ for(let i=0;i<line.length;i++){
+  const ch=line[i];
+  if(inQ){
+   if(ch==='"'){
+    if(line[i+1]==='"'){cur+='"';i++;}
+    else inQ=false;
+   } else cur+=ch;
+  } else {
+   if(ch==='"') inQ=true;
+   else if(ch===D){cells.push(cur.trim());cur="";}
+   else cur+=ch;
+  }
+ }
+ cells.push(cur.trim());
+ return cells;
+}
+function parseCSV(text){
+ const lines=text.trim().split(/\r?\n/).filter(l=>l.trim().length);
+ if(!lines.length) return {rows:[],errors:["The file is empty."]};
+
+ // Detect the delimiter from the header line: some spreadsheet exports use semicolons.
+ const header=lines[0];
+ const nComma=(header.match(/,/g)||[]).length;
+ const nSemi=(header.match(/;/g)||[]).length;
+ const nTab=(header.match(/\t/g)||[]).length;
+ const D = nTab>nComma&&nTab>nSemi ? "\t" : (nSemi>nComma ? ";" : ",");
+
+ // If nothing parsed as a column name, say why rather than listing every row as bad.
+ const head=header.split(D).map(h=>h.trim().toLowerCase());
+ const need=["participant","problem","category","source","correct"];
+ const missing=need.filter(c=>!head.includes(c));
+ if(missing.length){
+  const found=head.filter(Boolean).join(", ")||"(no column names recognised)";
+  const hint = nComma===0 && nSemi===0 && nTab===0
+   ? " The header row contains no separators at all — if you saved the file as .xlsx, export it as CSV instead."
+   : "";
+  return {rows:[],errors:["Missing column(s): "+missing.join(", ")+". Expected: "+need.join(", ")+"."+hint+" Columns found: "+found+"."]};
+ }
+ const idx={}; need.forEach(c=>idx[c]=head.indexOf(c));
+ const rows=[],errors=[];
+ lines.slice(1).forEach((line,i)=>{
+  const cells=splitDelimited(line,D);
+  const raw={
+   line:i+2,
+   participant:cells[idx.participant]||"",
+   problem:cells[idx.problem]||"",
+   category:cells[idx.category]||"",
+   source:(cells[idx.source]||"").toLowerCase(),
+   correctRaw:cells[idx.correct]||""
+  };
+  const c=raw.correctRaw.toLowerCase();
+  let correct=null;
+  if(["1","true","yes","y","correct","right"].includes(c)) correct=1;
+  else if(["0","false","no","n","incorrect","wrong"].includes(c)) correct=0;
+  raw.correct=correct;
+  rows.push(raw);
+ });
+ return {rows,errors,delimiter:D};
+}
+
+function validate(rows){
+ const errors=[],warnings=[];
+ if(!rows.length){errors.push("No data rows found.");return {errors,warnings};}
+
+ const badSource=rows.filter(r=>r.source!=="human"&&r.source!=="ai");
+ if(badSource.length) errors.push(badSource.length+" row(s) have a source that is neither 'human' nor 'ai' (first at line "+badSource[0].line+").");
+
+ const badCorrect=rows.filter(r=>r.correct===null);
+ if(badCorrect.length) errors.push(badCorrect.length+" row(s) have an unreadable 'correct' value (first at line "+badCorrect[0].line+"). Use 1/0 or yes/no.");
+
+ const noProblem=rows.filter(r=>!r.problem);
+ if(noProblem.length) errors.push(noProblem.length+" row(s) are missing a problem ID (first at line "+noProblem[0].line+").");
+
+ const noCat=rows.filter(r=>!r.category);
+ if(noCat.length) warnings.push(noCat.length+" row(s) have no category, so they will be grouped as 'uncategorised'.");
+
+ const humans=rows.filter(r=>r.source==="human");
+ const noPid=humans.filter(r=>!r.participant);
+ if(noPid.length) errors.push(noPid.length+" human row(s) have no participant ID (first at line "+noPid[0].line+").");
+
+ // duplicates: same participant + problem + source
+ const seen=new Map(),dupes=[];
+ rows.forEach(r=>{
+  const key=(r.participant||"-")+"|"+r.problem+"|"+r.source;
+  if(seen.has(key)) dupes.push(r); else seen.set(key,r);
+ });
+ if(dupes.length) errors.push(dupes.length+" duplicate row(s) — the same participant answered the same problem more than once (first at line "+dupes[0].line+").");
+
+ // inconsistent category for the same problem
+ const catOf=new Map(),catBad=[];
+ rows.forEach(r=>{
+  if(!r.problem||!r.category)return;
+  if(catOf.has(r.problem)&&catOf.get(r.problem)!==r.category) catBad.push(r.problem);
+  else if(!catOf.has(r.problem)) catOf.set(r.problem,r.category);
+ });
+ if(catBad.length){
+  const detail=[...new Set(catBad)].slice(0,3).map(p=>{
+   const cats=[...new Set(rows.filter(r=>r.problem===p).map(r=>r.category).filter(Boolean))];
+   return p+" ("+cats.join(" vs ")+")";
+  }).join("; ");
+  warnings.push("Problem(s) listed under more than one category: "+detail+(catBad.length>3?" and "+(catBad.length-3)+" more":"")+". The first category found is used for the whole problem.");
+ }
+
+ // human coverage per problem
+ const problems=[...new Set(rows.map(r=>r.problem).filter(Boolean))];
+ const parts=[...new Set(humans.map(r=>r.participant).filter(Boolean))];
+ const incomplete=[];
+ problems.forEach(p=>{
+  const n=humans.filter(r=>r.problem===p).length;
+  if(n!==parts.length) incomplete.push(p+" ("+n+"/"+parts.length+")");
+ });
+ if(incomplete.length) warnings.push("Not every participant answered every problem: "+incomplete.join(", ")+". Response counts are used as they are, not assumed.");
+
+ const aiProblems=[...new Set(rows.filter(r=>r.source==="ai").map(r=>r.problem))];
+ const missingAI=problems.filter(p=>!aiProblems.includes(p));
+ if(missingAI.length) warnings.push("The AI has no row for problem(s) "+missingAI.join(", ")+".");
+
+ return {errors,warnings};
+}
+
+function loadRows(text,label){
+ const parsed=parseCSV(text);const rows=parsed.rows;
+ const {errors,warnings}=validate(rows);
+ const v=$("validation");
+ if(errors.length){
+  RVALID=false;
+  v.className="valid bad";
+  v.innerHTML="<strong>"+errors.length+" problem(s) found — nothing has been calculated.</strong><ul>"+
+   errors.map(e=>"<li>"+esc(e)+"</li>").join("")+
+   (warnings.length?"</ul><strong style='display:block;margin-top:8px'>Also noted:</strong><ul>"+warnings.map(w=>"<li>"+esc(w)+"</li>").join(""):"")+
+   "</ul>";
+  ROWS=[];$("csvStatus").textContent="";
+  renderResearch();
+  return;
+ }
+ ROWS=rows.filter(r=>(r.correct===0||r.correct===1)&&(r.source==="human"||r.source==="ai")&&r.problem);
+ IS_SAMPLE=/the example dataset/.test(label);
+ RVALID=true;
+ v.className="valid ok";
+ v.innerHTML="<strong>Checked and valid.</strong> "+ROWS.length+" rows read from "+esc(label)+
+  (warnings.length?"<ul>"+warnings.map(w=>"<li>"+esc(w)+"</li>").join("")+"</ul>":"<p style='margin:6px 0 0'>No warnings.</p>");
+ $("csvStatus").textContent="Loaded "+ROWS.length+" rows"+(parsed.delimiter===","?"":parsed.delimiter===";"?" (semicolon-separated file)":" (tab-separated file)")+".";
+ renderResearch();
+}
+
+function rHasHuman(){return ROWS.some(r=>r.source==="human")}
+function rStats(){
+ if(!ROWS.length) return null;
+ const humans=ROWS.filter(r=>r.source==="human");
+ const ai=ROWS.filter(r=>r.source==="ai");
+ const parts=[...new Set(humans.map(r=>r.participant))].sort();
+ const problems=[...new Set(ROWS.map(r=>r.problem))];
+ const cats={};
+ ROWS.forEach(r=>{const c=r.category||"uncategorised";(cats[c]=cats[c]||[]).push(r)});
+ return {
+  humans,ai,parts,problems,cats,
+  humanCorrect:humans.filter(r=>r.correct===1).length,
+  aiCorrect:ai.filter(r=>r.correct===1).length,
+  humanAcc:humans.length?humans.filter(r=>r.correct===1).length/humans.length*100:null,
+  aiAcc:ai.length?ai.filter(r=>r.correct===1).length/ai.length*100:null
+ };
+}
+
+
+function rMetrics(){
+ if(!ROWS.length) return null;
+ const humans=ROWS.filter(r=>r.source==="human"), ai=ROWS.filter(r=>r.source==="ai");
+ const hN=humans.length, aN=ai.length;
+ const hOk=humans.filter(r=>r.correct===1).length;
+ const aOk=ai.filter(r=>r.correct===1).length;
+ const parts=[...new Set(humans.map(r=>r.participant))].sort();
+ // per-participant accuracy, then mean and spread across people
+ const perPart=parts.map(p=>{
+  const mine=humans.filter(r=>r.participant===p);
+  return mine.length?mine.filter(r=>r.correct===1).length/mine.length*100:null;
+ }).filter(v=>v!==null);
+ const pMean=perPart.length?mean(perPart):null;
+ const pSD=perPart.length>1
+  ? Math.sqrt(perPart.reduce((s,v)=>s+(v-pMean)**2,0)/perPart.length)
+  : null;
+ const pMin=perPart.length?Math.min(...perPart):null;
+ const pMax=perPart.length?Math.max(...perPart):null;
+ // accuracy per problem, then mean and spread across problems
+ const problems=[...new Set(ROWS.map(r=>r.problem))];
+ const perProb=problems.map(pr=>{
+  const h=humans.filter(r=>r.problem===pr);
+  return h.length?h.filter(r=>r.correct===1).length/h.length*100:null;
+ }).filter(v=>v!==null);
+ const prSD=perProb.length>1
+  ? Math.sqrt(perProb.reduce((s,v)=>s+(v-mean(perProb))**2,0)/perProb.length)
+  : null;
+ // standard error of the human accuracy, so a difference can be judged against noise
+ const hAcc=hN?hOk/hN:null;
+ const se=(hAcc!==null&&hN>1)?Math.sqrt(hAcc*(1-hAcc)/hN)*100:null;
+ const aAcc=aN?aOk/aN:null;
+ const gap=(hAcc!==null&&aAcc!==null)?(aAcc-hAcc)*100:null;
+ let verdict="Not enough data to compare.";
+ if(gap!==null&&se!==null){
+  verdict = "The AI and the humans differ by "+Math.abs(gap).toFixed(1)+" points ("+(gap>0?"AI ahead":"humans ahead")+"). "
+   +(isAdv()
+     ? "The rough margin (±"+(1.96*se).toFixed(1)+" points) only shows how much the human figure could wobble; the paired test under Humans vs AI checks whether the gap is more than chance."
+     : "Switch to Advanced to see whether this gap is more than chance.")
+   +" Percentages describe this sample only.";
+ }
+ return {hN,aN,hOk,aOk,parts:parts.length,problems:problems.length,
+  humanAcc:hAcc===null?null:hAcc*100, aiAcc:aAcc===null?null:aAcc*100,
+  se, gap, verdict, pMean, pSD, pMin, pMax, prSD,
+  humanErrRate:hAcc===null?null:(1-hAcc)*100, aiErrRate:aAcc===null?null:(1-aAcc)*100};
+}
+
+function renderRMetrics(){
+ const el=$("rMetrics"); if(!el)return;
+ const m=rMetrics();
+ if(!m){ el.innerHTML=""; $("rMetricsNote").textContent="Load a dataset to compute these measures."; return; }
+ const cards=[
+  ["Human accuracy", m.humanAcc===null?"N/A":m.humanAcc.toFixed(1)+"%", m.hOk+"/"+m.hN+" correct", true],
+  ["AI accuracy", m.aiAcc===null?"N/A":m.aiAcc.toFixed(1)+"%", m.aOk+"/"+m.aN+" correct", true],
+  ["Accuracy gap", m.gap===null?"N/A":(m.gap>0?"+":"")+m.gap.toFixed(1)+" pts", m.gap===null?"—":(m.gap>0?"AI ahead":"humans ahead"), true],
+  ["Responses analysed", m.hN+m.aN, m.hN+" human + "+m.aN+" AI", true],
+  ["Human error rate", m.humanErrRate===null?"N/A":m.humanErrRate.toFixed(1)+"%", (m.hN-m.hOk)+" wrong"],
+  ["AI error rate", m.aiErrRate===null?"N/A":m.aiErrRate.toFixed(1)+"%", (m.aN-m.aOk)+" wrong"],
+  ["Rough margin (95%)", m.se===null?"N/A":"±"+(1.96*m.se).toFixed(1)+" pts", "human figure only"],
+  ["Mean per person", m.pMean===null?"N/A":m.pMean.toFixed(1)+"%", m.parts+" participants"],
+  ["Spread between people", m.pSD===null?"N/A":"±"+m.pSD.toFixed(1)+" pts", "SD across participants"],
+  ["Weakest participant", m.pMin===null?"N/A":m.pMin.toFixed(0)+"%", "lowest accuracy"],
+  ["Strongest participant", m.pMax===null?"N/A":m.pMax.toFixed(0)+"%", "highest accuracy"],
+  ["Spread between problems", m.prSD===null?"N/A":"±"+m.prSD.toFixed(1)+" pts", "SD across problems"]
+ ];
+ if(!rHasHuman()){
+  const pr=[...new Set(ROWS.map(r=>r.problem))].length;
+  el.innerHTML=[
+   ["AI accuracy", m.aiAcc===null?"N/A":m.aiAcc.toFixed(1)+"%", m.aOk+"/"+m.aN+" correct"],
+   ["AI error rate", m.aiErrRate===null?"N/A":m.aiErrRate.toFixed(1)+"%", (m.aN-m.aOk)+" wrong"],
+   ["Problems", pr, "one AI answer each"]
+  ].map(([l,v,u])=>'<div class="metric"><div class="name">'+l+'</div><div class="value">'+v+'</div><div class="unit">'+u+'</div></div>').join("");
+  $("rMetricsNote").textContent="The AI got "+m.aOk+" of "+m.aN+" right. This describes one run on these problems; add human rows to compare it with people.";
+  return;
+ }
+ el.innerHTML=cards.filter(c=>c[3]||isAdv()).map(([l,v,u])=>
+  '<div class="metric"><div class="name">'+l+'</div><div class="value">'+v+'</div><div class="unit">'+u+'</div></div>').join("");
+ $("rMetricsNote").textContent=m.verdict;
+}
+
+function renderResearchExplanations(){
+ const m=rMetrics();
+ if(!m){ $("rMeaning").innerHTML=""; $("rSpread").innerHTML=""; $("rGapNote").innerHTML=""; return; }
+ if(!rHasHuman()){
+  $("rMeaning").innerHTML="<h4>Reading these numbers</h4><p>Each problem has one AI answer, so every problem moves the AI's accuracy by "+(100/Math.max(1,m.aN)).toFixed(0)+" points. "+
+   "Asking the same AI again could give different answers, so running each problem more than once shows how consistent it is.</p>";
+  $("rSpread").innerHTML=""; $("rGapNote").innerHTML="";
+  return;
+ }
+ const moe=m.se===null?null:1.96*m.se;
+ $("rMeaning").innerHTML="<h4>Reading these numbers</h4>"+
+  (moe===null
+   ? "<p>There are too few human answers to estimate a margin.</p>"
+   : "<p>The rough margin of <strong>&plusmn;"+moe.toFixed(1)+" points</strong> shows how much the human figure could move with a different group of "+m.parts+" people. It is not the test of the AI&ndash;human difference; that is the paired test under <strong>Humans vs AI</strong>.</p>")+
+  "<p>The AI gives one answer per problem, so its figure has no spread. The human figure averages "+m.parts+" people, so the two are not a like-for-like contest.</p>";
+ if(m.pSD!==null){
+  const word=m.pSD<8?"a tight grouping, so one average describes them well.":m.pSD<18?"a moderate spread, so the average hides real differences.":"a wide spread, so the average describes almost nobody.";
+  $("rSpread").innerHTML="<p>Participants range from <strong>"+m.pMin.toFixed(0)+"%</strong> to <strong>"+m.pMax.toFixed(0)+"%</strong> (SD "+m.pSD.toFixed(1)+" points): "+word+"</p>";
+ } else $("rSpread").innerHTML="";
+ $("rGapNote").innerHTML="<p><strong>Reading the gap column:</strong> positive means the AI did better than the group on that problem; negative means the humans did. "+
+  "Each rate rests on "+m.parts+" people, so one person changing an answer moves it by "+(100/Math.max(1,m.parts)).toFixed(0)+" points. Treat one problem's gap as something to look into, not a finding.</p>";
+}
+
+function renderLimits(){
+ const el=$("rLimits"); if(!el)return;
+ if(ROWS.length&&!rHasHuman()){
+  const pr=[...new Set(ROWS.map(r=>r.problem))].length;
+  el.innerHTML=
+   "<div><strong>Exact match, not closeness.</strong> An answer is correct only if it matches exactly; a nearly-right method still scores zero.</div>"+
+   "<div><strong>One AI run per problem.</strong> This measures the AI once on these "+pr+" problems. Run again, it might answer differently.</div>"+
+   "<div><strong>No comparison with people.</strong> Without human answers, this shows how the AI did, not whether it beats humans.</div>"+
+   "<div><strong>The problems were chosen.</strong> A different set of problems could give a very different accuracy.</div>";
+  return;
+ }
+ const c=coverageReport();
+ const n=c?c.parts.length:0, pr=c?c.problems.length:0;
+ el.innerHTML=
+  "<div><strong>Exact match, not closeness.</strong> An answer is correct only if it matches exactly; a nearly-right method still scores zero.</div>"+
+  "<div><strong>One AI run per problem.</strong> This measures the AI once on these "+pr+" problems. Run again, it might answer differently.</div>"+
+  "<div><strong>"+n+" participants describe this group only.</strong> They are not an estimate for people in general.</div>"+
+  "<div class='adv'><strong>The comparison is paired.</strong> Both sources answered the same problems, so the test looks only at where they disagreed. Few disagreements means little power: “not shown” is not “no difference”.</div>"+
+  "<div class='adv'><strong>Ties are not wins.</strong> A participant scoring exactly level with the AI is reported separately.</div>";
+}
+function coverageReport(){
+ if(!ROWS.length) return null;
+ const humans=ROWS.filter(r=>r.source==="human");
+ const ai=ROWS.filter(r=>r.source==="ai");
+ const parts=[...new Set(humans.map(r=>r.participant))].sort();
+ const problems=[...new Set(ROWS.map(r=>r.problem))];
+ const expected = parts.length*problems.length;
+ const present = humans.length;
+ const missingRows=[];
+ parts.forEach(p=>{
+  const mine=new Set(humans.filter(r=>r.participant===p).map(r=>r.problem));
+  problems.forEach(pr=>{ if(!mine.has(pr)) missingRows.push({p,pr}); });
+ });
+ const aiProblems=new Set(ai.map(r=>r.problem));
+ const aiMissing=problems.filter(pr=>!aiProblems.has(pr));
+ return {parts,problems,expected,present,missingRows,aiMissing,
+  complete:present===expected&&aiMissing.length===0};
+}
+function renderCoverage(){
+ const el=$("coverageStats"); if(!el)return;
+ const c=coverageReport();
+ if(!c){
+  el.innerHTML="";$("coverageNote").innerHTML="";
+  return;
+ }
+ $("coverageStats").innerHTML=[
+  ["Human answers expected", c.expected, c.parts.length+" people × "+c.problems.length+" problems"],
+  ["Human answers present", c.present, c.present===c.expected?"complete":"missing "+(c.expected-c.present)],
+  ["Problems the AI covered", c.problems.length-c.aiMissing.length+" / "+c.problems.length, c.aiMissing.length?c.aiMissing.length+" missing":"complete"],
+  ["Participants", c.parts.length, "all in the denominator"],
+  ["Problems", c.problems.length, "fixed set for everyone"]
+ ].map(([l,v,u])=>'<div class="metric"><div class="name">'+l+'</div><div class="value">'+v+'</div><div class="unit">'+u+'</div></div>').join("");
+
+ let html="<h4>How missing answers are treated</h4>";
+ if(c.complete){
+  html+="<p>Everyone answered every problem and the AI covered the full set, so no figure is affected by missing answers.</p>";
+ } else {
+  html+="<p><strong>Missing answers are left out of the denominator, not counted as wrong.</strong> State this rule in any write-up; counting blanks as wrong would be a different, also valid, choice.</p>";
+  if(c.missingRows.length){
+   const shown=c.missingRows.slice(0,8).map(m=>m.p+" missed problem "+m.pr).join("; ");
+   html+="<p>Missing: "+shown+(c.missingRows.length>8?" and "+(c.missingRows.length-8)+" more":"")+".</p>";
+  }
+  if(c.aiMissing.length) html+="<p>The AI has no answer for problem(s) "+c.aiMissing.join(", ")+", so those drop out of every human-versus-AI comparison.</p>";
+ }
+ $("coverageNote").innerHTML=html;
+}
+function pairedComparison(){
+ if(!ROWS.length) return null;
+ const problems=[...new Set(ROWS.map(r=>r.problem))];
+ const ai=ROWS.filter(r=>r.source==="ai");
+ const humans=ROWS.filter(r=>r.source==="human");
+ const parts=[...new Set(humans.map(r=>r.participant))];
+ let bothRight=0, bothWrong=0, aiOnly=0, humansOnly=0, rows=0, split=0;
+ problems.forEach(p=>{
+  const a=ai.find(r=>r.problem===p);
+  if(!a) return;
+  const h=humans.filter(r=>r.problem===p);
+  if(!h.length) return;
+  // the human majority verdict for this problem
+  const hRight=h.filter(r=>r.correct===1).length;
+  const hMajority = hRight*2 > h.length;           // strict majority
+  const aRight = a.correct===1;
+  rows++;
+  if(hRight*2===h.length){split++;return}           // humans split exactly 50/50: no majority, so no pair to count
+  if(aRight && hMajority) bothRight++;
+  else if(!aRight && !hMajority) bothWrong++;
+  else if(aRight && !hMajority) aiOnly++;
+  else humansOnly++;
+ });
+ const discordant = aiOnly + humansOnly;
+ // Exact binomial two-sided p for the discordant pairs (small n, so exact beats chi-square).
+ function binomTwoSided(k,n){
+  if(n===0) return 1;
+  const C=(n,r)=>{let c=1;for(let i=1;i<=r;i++)c=c*(n-r+i)/i;return c};
+  const p=0.5;
+  let probs=[];
+  for(let i=0;i<=n;i++) probs.push(C(n,i)*Math.pow(p,i)*Math.pow(1-p,n-i));
+  const target=probs[k];
+  return probs.reduce((s,v)=>s+(v<=target+1e-12?v:0),0);
+ }
+ const p = discordant>0 ? Math.min(1,binomTwoSided(Math.min(aiOnly,humansOnly),discordant)) : null;
+ return {problems:rows, bothRight, bothWrong, aiOnly, humansOnly, discordant, p, parts:parts.length, split};
+}
+
+function humanDistribution(){
+ if(!ROWS.length) return null;
+ const humans=ROWS.filter(r=>r.source==="human");
+ const parts=[...new Set(humans.map(r=>r.participant))].sort();
+ const per=parts.map(p=>{
+  const mine=humans.filter(r=>r.participant===p);
+  const acc=mine.length?mine.filter(r=>r.correct===1).length/mine.length*100:null;
+  return {p,acc,n:mine.length,ok:mine.filter(r=>r.correct===1).length};
+ }).filter(v=>v.acc!==null);
+ if(!per.length) return null;
+ const vals=per.map(v=>v.acc);
+ const m=mean(vals);
+ const med=median(vals);
+ const sd=vals.length>1?Math.sqrt(vals.reduce((s,v)=>s+(v-m)**2,0)/vals.length):null;
+ const sorted=[...per].sort((x,y)=>x.acc-y.acc);
+ // The AI's rate is measured per problem, not per person, which is the honest basis.
+ const ai=ROWS.filter(r=>r.source==="ai");
+ const aiAcc=ai.length?ai.filter(r=>r.correct===1).length/ai.length*100:null;
+ // Where the AI figure sits within the human distribution.
+ let rank=null, ties=null;
+ if(aiAcc!==null){
+  const below=vals.filter(v=>v<aiAcc-1e-9).length;
+  const equal=vals.filter(v=>Math.abs(v-aiAcc)<=1e-9).length;
+  rank=below/vals.length*100;
+  ties=equal;
+ }
+ return {per,sorted,m,med,sd,min:Math.min(...vals),max:Math.max(...vals),aiAcc,rank,ties,n:vals.length};
+}
+
+function renderHumanVsAI(){
+ const hv=$("hvHuman"); if(!hv)return;
+ const d=humanDistribution();
+ if(!d){
+  hv.innerHTML="";$("hvAI").innerHTML="";$("hvNote").innerHTML="";
+  const c=$("hvChart"); if(c){const x=c.getContext("2d");x.clearRect(0,0,c.width,c.height);}
+  return;
+ }
+ hv.innerHTML=[
+  ["Human mean accuracy", d.m.toFixed(1)+"%", d.n+" participants"],
+  ["Human median accuracy", d.med.toFixed(1)+"%", "middle participant"],
+  ["Spread (SD)", d.sd===null?"N/A":"±"+d.sd.toFixed(1)+" pts", "across people"],
+  ["Weakest participant", d.min.toFixed(0)+"%", d.sorted[0].p],
+  ["Strongest participant", d.max.toFixed(0)+"%", d.sorted[d.sorted.length-1].p],
+  ["Range", (d.max-d.min).toFixed(0)+" pts", "highest minus lowest"]
+ ].map(([l,v,u])=>'<div class="metric"><div class="name">'+l+'</div><div class="value">'+v+'</div><div class="unit">'+u+'</div></div>').join("");
+
+ $("hvAI").innerHTML=[
+  ["AI accuracy", d.aiAcc===null?"N/A":d.aiAcc.toFixed(1)+"%", "from "+ROWS.filter(r=>r.source==="ai").length+" answers"],
+  ["Spread", "none", "not measurable"],
+  ["Participants", "1", "a single system"],
+  ["Above the human mean?", d.aiAcc===null?"N/A":(d.aiAcc>d.m?"Yes":"No"), "vs "+d.m.toFixed(1)+"%"],
+  ["Scored below the AI", d.rank===null?"N/A":d.rank.toFixed(0)+"%", "ties excluded"],
+  ["Scored level with the AI", d.ties===null?"N/A":String(d.ties), d.ties===1?"participant":"participants"]
+ ].map(([l,v,u])=>'<div class="metric"><div class="name">'+l+'</div><div class="value">'+v+'</div><div class="unit">'+u+'</div></div>').join("");
+
+ let compare;
+ if(d.aiAcc===null) compare="The AI has no answers in this dataset, so it cannot be compared.";
+ else compare="The AI's "+d.aiAcc.toFixed(1)+"% is "+(d.aiAcc>d.m?"<strong>above</strong>":d.aiAcc<d.m?"<strong>below</strong>":"<strong>equal to</strong>")+
+  " the human mean of "+d.m.toFixed(1)+"%. "+d.rank.toFixed(0)+"% of participants scored below the AI"+(d.ties?", and "+d.ties+" scored level with it":"")+".";
+ const P=pairedComparison();
+ let pairedText="";
+ if(P){
+  const splitTxt=P.split?" ("+P.split+" problem"+(P.split===1?"":"s")+" where the humans split exactly 50/50 "+(P.split===1?"was":"were")+" left out)":"";
+  if(P.discordant>0){
+   pairedText="<p><strong>Paired test.</strong> On the "+P.discordant+" problem"+(P.discordant===1?"":"s")+" where they disagreed, the AI was right "+P.aiOnly+" time"+(P.aiOnly===1?"":"s")+
+    " and the human majority "+P.humansOnly+" time"+(P.humansOnly===1?"":"s")+splitTxt+". Exact paired test: p &asymp; "+(P.p>=0.001?P.p.toFixed(3):"&lt;0.001")+". "+
+    (P.p<0.05
+     ? "That is below 0.05, so the difference is larger than chance alone would explain on these problems."
+     : "That is above 0.05: <strong>no statistical evidence of a difference</strong>. With "+P.parts+" participants this test has little power, so this means “not shown”, not “no difference”.")+"</p>";
+  } else {
+   pairedText="<p><strong>Paired test.</strong> Wherever the humans had a clear majority, they agreed with the AI, so there is nothing to test"+splitTxt+".</p>";
+  }
+ }
+ $("hvNote").innerHTML="<h4>Humans vs AI</h4><p>"+compare+"</p>"+pairedText+
+  "<p>The human mean would move if different people were tested; the AI figure would not. A difference of a few points is not a settled result.</p>";
+
+ drawHvChart(d);
+}
+
+function drawHvChart(d){
+ const canvas=$("hvChart"); if(!canvas)return;
+ const rect=canvas.getBoundingClientRect(); if(!rect.width)return;
+ const dpr=window.devicePixelRatio||1;
+ canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);
+ const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
+ const w=rect.width,h=rect.height,pad={l:150,r:70,t:20,b:26};
+ const pw=w-pad.l-pad.r, ph=h-pad.t-pad.b;
+ const X=v=>pad.l+Math.max(0,Math.min(1,v/100))*pw;
+ ctx.clearRect(0,0,w,h);ctx.font="12px system-ui";
+
+ // gridlines at 0,25,50,75,100
+ ctx.strokeStyle="#eef0f5";ctx.fillStyle="#9aa0a8";
+ [0,25,50,75,100].forEach(v=>{
+  const x=X(v);
+  ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ph);ctx.stroke();
+  ctx.textAlign="center";ctx.fillText(v+"%",x,pad.t+ph+15);
+ });
+ ctx.textAlign="left";
+
+ const rowH=ph/3;
+ // row 1: AI single value
+ const yAI=pad.t+rowH*0.5;
+ ctx.fillStyle="#626980";ctx.fillText("AI (one figure)",pad.l-8,yAI+4);
+ ctx.fillStyle="#6558d9";
+ ctx.fillRect(pad.l,yAI-9,Math.max(0,X(d.aiAcc===null?0:d.aiAcc)-pad.l),18);
+ if(d.aiAcc!==null){ctx.fillStyle="#626980";ctx.fillText(d.aiAcc.toFixed(1)+"%",X(d.aiAcc)+7,yAI+4)}
+
+ // row 2: human mean
+ const yMean=pad.t+rowH*1.5;
+ ctx.fillStyle="#626980";ctx.fillText("Human mean",pad.l-8,yMean+4);
+ ctx.fillStyle="#c2683f";
+ ctx.fillRect(pad.l,yMean-9,Math.max(0,X(d.m)-pad.l),18);
+ ctx.fillStyle="#626980";ctx.fillText(d.m.toFixed(1)+"%",X(d.m)+7,yMean+4);
+
+ // row 3: each participant as a dot along the axis
+ const yDots=pad.t+rowH*2.55;
+ ctx.fillStyle="#626980";ctx.fillText("Each participant",pad.l-8,yDots+4);
+ ctx.strokeStyle="#d9dce3";ctx.beginPath();ctx.moveTo(pad.l,yDots);ctx.lineTo(pad.l+pw,yDots);ctx.stroke();
+ d.per.forEach(p=>{
+  const x=X(p.acc);
+  ctx.beginPath();ctx.arc(x,yDots-7,4.5,0,Math.PI*2);
+  ctx.fillStyle = p.acc===d.min?"#a8452a" : p.acc===d.max?"#16845b" : "#c2683f";
+  ctx.fill();
+  ctx.strokeStyle="#fff";ctx.lineWidth=1;ctx.stroke();
+ });
+ // mean marker on the dot row
+ ctx.strokeStyle="#20243a";ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+ ctx.beginPath();ctx.moveTo(X(d.m),yDots-16);ctx.lineTo(X(d.m),yDots+8);ctx.stroke();
+ ctx.setLineDash([]);
+ // AI marker on the dot row, for direct reading
+ if(d.aiAcc!==null){
+  const x=X(d.aiAcc);
+  ctx.strokeStyle="#6558d9";ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ph);ctx.stroke();
+ }
+}
+function drawRBar(canvas,rows,{avg=null,max=100,colA="#c2683f"}={}){
+ const rect=canvas.getBoundingClientRect();
+ if(!rect.width||!rows.length)return;
+ const dpr=window.devicePixelRatio||1;
+ canvas.width=Math.round(rect.width*dpr);canvas.height=Math.round(rect.height*dpr);
+ const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
+ const w=rect.width,h=rect.height,pad={l:118,r:52,t:14,b:22};
+ const pw=w-pad.l-pad.r, ph=h-pad.t-pad.b;
+ ctx.clearRect(0,0,w,h);ctx.font="12px system-ui";
+ const rowH=ph/rows.length;
+ rows.forEach((r,i)=>{
+  const y=pad.t+rowH*i+rowH*0.18, bh=Math.max(rowH*0.64,10);
+  ctx.fillStyle="#626980";ctx.textAlign="right";
+  const label=r.label.length>17?r.label.slice(0,16)+"…":r.label;
+  ctx.fillText(label,pad.l-8,y+bh*0.75);
+  ctx.textAlign="left";
+  // two stacked bars within the row
+  const single=(r.b===undefined);
+  const half=single?bh:bh/2-1;
+  const bars=single?[[r.a,colA,y]]:[[r.a,colA,y],[r.b,"#6558d9",y+half+2]];
+  bars.forEach(([v,col,by])=>{
+   ctx.fillStyle="#eceef2";ctx.fillRect(pad.l,by,pw,half);
+   if(v!==null&&Number.isFinite(v)){
+    ctx.fillStyle=col;ctx.fillRect(pad.l,by,Math.max(0,Math.min(1,v/max))*pw,half);
+    ctx.fillStyle="#626980";
+    ctx.fillText(v.toFixed(0)+"%",pad.l+Math.max(0,Math.min(1,v/max))*pw+6,by+half*0.85);
+   } else {
+    ctx.fillStyle="#b9bcc4";ctx.fillText("no data",pad.l+6,by+half*0.85);
+   }
+  });
+ });
+ if(avg!==null&&Number.isFinite(avg)){
+  const x=pad.l+Math.max(0,Math.min(1,avg/max))*pw;
+  ctx.strokeStyle="#20243a";ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ph);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle="#20243a";ctx.font="11px system-ui";
+  ctx.textAlign="center";ctx.fillText("avg "+avg.toFixed(0)+"%",x,pad.t-3);ctx.textAlign="left";
+ }
+}
+
+function drawRCharts(){
+ const catC=$("rCatChart"), partC=$("rPartChart");
+ if(catC){
+  const cats={};
+  ROWS.forEach(r=>{const c=r.category||"uncategorised";(cats[c]=cats[c]||[]).push(r)});
+  const RH=rHasHuman();
+  const rows=Object.entries(cats).map(([cat,rs])=>{
+   const h=rs.filter(r=>r.source==="human"),a=rs.filter(r=>r.source==="ai");
+   const aa=a.length?a.filter(r=>r.correct===1).length/a.length*100:null;
+   if(!RH) return {label:cat,a:aa};
+   return {label:cat,
+    a:h.length?h.filter(r=>r.correct===1).length/h.length*100:null,
+    b:aa};
+  });
+  drawRBar(catC,rows,{colA:RH?"#c2683f":"#6558d9"});
+ }
+ if(partC){
+  const humans=ROWS.filter(r=>r.source==="human");
+  const parts=[...new Set(humans.map(r=>r.participant))].sort();
+  const rows=parts.map(p=>{
+   const mine=humans.filter(r=>r.participant===p);
+   const acc=mine.length?mine.filter(r=>r.correct===1).length/mine.length*100:null;
+   return {label:p,a:acc};
+  });
+  const avg=rows.length?mean(rows.map(r=>r.a).filter(v=>v!==null)):null;
+  drawRBar(partC,rows,{avg});
+ }
+}
+
+function renderResearch(){
+ if(!$("rCounts"))return;
+ const s=rStats();
+ if(!s){
+  $("rCounts").innerHTML="";
+  $("accSource").innerHTML="";$("accCategory").innerHTML="";$("catNote").textContent="";
+  $("probTable").innerHTML="";$("partTable").innerHTML="";
+  document.body.classList.remove("raionly");
+  $("rBannerText").textContent="Load a dataset to see its counts.";
+  $("rCountsNote").textContent="No data loaded yet.";
+  renderRMetrics();renderResearchExplanations();renderHumanVsAI();renderCoverage();renderLimits();
+  const cc=$("rCatChart"), pc=$("rPartChart");
+  if(cc){const c=cc.getContext("2d");c.clearRect(0,0,cc.width,cc.height);}
+  if(pc){const c=pc.getContext("2d");c.clearRect(0,0,pc.width,pc.height);}
+  return;
+ }
+ const nPeople=s.parts.length,nProblems=s.problems.length,nHuman=s.humans.length,nAI=s.ai.length;
+ const RH=nHuman>0;
+ document.body.classList.toggle("raionly",!RH);
+ if(!RH){
+  $("rCounts").innerHTML=[
+   ["Problems in the study",nProblems,"k2"],
+   ["AI responses",nAI,"k3"],
+   ["Categories",Object.keys(s.cats).length,"k1"]
+  ].map(([l,v,c])=>'<div class="metric '+c+'"><div class="name">'+l+'</div><div class="value">'+v+'</div><div class="unit"> </div></div>').join("");
+  $("rCountsNote").textContent="AI-only data: the AI answered "+nAI+" of "+nProblems+" problems. There are no human answers, so nothing here compares the AI with people.";
+  $("rBannerText").innerHTML="<strong>AI-only data</strong> ("+nProblems+" problems). These figures describe how this AI did on these problems, one run each.";
+ }
+ else $("rCounts").innerHTML=[
+  ["People (participants)",nPeople,"k1"],
+  ["Problems in the study",nProblems,"k2"],
+  ["Human responses",nHuman,"k3"],
+  ["AI responses",nAI,"k3"],
+  ["Questions per person",nPeople?(nHuman/nPeople).toFixed(1):"—","k1"],
+  ["Responses per problem",nProblems?(nHuman/nProblems).toFixed(1):"—","k2"]
+ ].map(([l,v,c])=>'<div class="metric '+c+'"><div class="name">'+l+'</div><div class="value">'+v+'</div><div class="unit"> </div></div>').join("");
+
+ if(RH) $("rCountsNote").textContent =
+  nPeople+" "+plural(nPeople,"person","people")+" answered "+nProblems+" problems, giving "+nHuman+" human responses. The AI gave "+nAI+", one per problem.";
+
+ if(RH) $("rBannerText").innerHTML = nPeople<20
+  ? "A <strong>small descriptive study</strong> ("+nPeople+" people, "+nProblems+" problems). The figures describe these participants only, and one or two answers can swing a percentage a lot."
+  : nPeople+" participants and "+nProblems+" problems. The figures describe this sample; generalise with care.";
+
+ // by source
+ $("accSource").innerHTML=[
+  ["Humans",s.humanAcc,s.humanCorrect+"/"+nHuman,"#c2683f"],
+  ["AI",s.aiAcc,s.aiCorrect+"/"+nAI,"#6558d9"]
+ ].filter(x=>RH||x[0]==="AI").map(([l,pct,frac,col])=>
+  '<div class="metric"><div class="name">'+l+' accuracy</div><div class="value">'+
+  (pct===null?"N/A":pct.toFixed(0)+"%")+'</div><div class="unit">'+frac+' correct</div>'+
+  '<div class="bar" style="margin-top:8px"><i style="width:'+(pct===null?0:Math.max(0,Math.min(100,pct)))+'%;background:'+col+'"></i></div></div>'
+ ).join("");
+
+ // by category
+ const catRows=Object.entries(s.cats).map(([cat,rows])=>{
+  const h=rows.filter(r=>r.source==="human"), a=rows.filter(r=>r.source==="ai");
+  const hh=h.length?h.filter(r=>r.correct===1).length/h.length*100:null;
+  const aa=a.length?a.filter(r=>r.correct===1).length/a.length*100:null;
+  return {cat,hN:h.length,aN:a.length,hh,aa};
+ });
+ const col="#6558d9", colH="#c2683f";
+ $("accCategory").innerHTML=catRows.map(c=>
+  '<div class="acc"><div class="nm">'+esc(c.cat)+'</div>'+
+  (RH
+   ? '<div class="bar"><i style="width:'+(c.hh===null?0:c.hh)+'%;background:'+colH+'"></i></div>'+
+     '<div class="meta"><span>Humans '+(c.hh===null?"N/A":c.hh.toFixed(0)+"%")+' ('+c.hN+' answers)</span><span>AI '+(c.aa===null?"N/A":c.aa.toFixed(0)+"%")+' ('+c.aN+')</span></div></div>'
+   : '<div class="bar"><i style="width:'+(c.aa===null?0:c.aa)+'%;background:'+col+'"></i></div>'+
+     '<div class="meta"><span>AI '+(c.aa===null?"N/A":c.aa.toFixed(0)+"%")+'</span><span>'+c.aN+' '+plural(c.aN,"problem","problems")+'</span></div></div>')
+ ).join("");
+ const smallCats=catRows.filter(c=>c.hN&&c.hN<10);
+ $("catNote").textContent = !RH
+  ? "With one AI answer per problem, a category with few problems changes a lot when one answer changes."
+  : smallCats.length
+  ? "Caution: "+(smallCats.map(c=>c.cat).join(", "))+" rest on fewer than 10 human answers, so a single answer changes the percentage a lot."
+  : "Each category here has at least 10 human answers.";
+
+ // by problem
+ $("probTable").innerHTML=s.problems.map(p=>{
+  const h=s.humans.filter(r=>r.problem===p), a=s.ai.filter(r=>r.problem===p);
+  const cat=(ROWS.find(r=>r.problem===p&&r.category)||{}).category||"—";
+  const hc=h.filter(r=>r.correct===1).length;
+  const rate=h.length?hc/h.length*100:null;
+  const aOk=a.length?(a[0].correct===1?"correct":"incorrect"):"—";
+  const gap=(rate===null||a.length===0)?null:((a[0].correct===1?100:0)-rate);
+  if(!RH) return "<tr><td>"+esc(p)+"</td><td>"+esc(cat)+"</td><td>"+aOk+"</td></tr>";
+  return "<tr><td>"+esc(p)+"</td><td>"+esc(cat)+"</td><td>"+aOk+"</td><td>"+hc+"/"+h.length+"</td><td>"+
+   (rate===null?"—":rate.toFixed(0)+"%")+"</td><td>"+
+   (gap===null?"—":(Math.abs(gap)<1e-9?"level":(gap>0?"AI higher by "+gap.toFixed(0)+" pts":"humans higher by "+Math.abs(gap).toFixed(0)+" pts")))+"</td></tr>";
+ }).join("");
+
+ // by participant
+ $("partTable").innerHTML=s.parts.map(p=>{
+  const mine=s.humans.filter(r=>r.participant===p);
+  const ok=mine.filter(r=>r.correct===1).length;
+  const chips=s.problems.map(pr=>{
+   const row=mine.find(r=>r.problem===pr);
+   if(!row) return '<span class="blank" title="did not answer">'+esc(pr)+' &middot; &ndash;</span>';
+   return '<span class="'+(row.correct===1?"hit":"miss")+'">'+esc(pr)+' '+(row.correct===1?"&#10003;":"&#10007;")+'</span>';
+  }).join("");
+  return "<tr><td>"+esc(p)+"</td><td>"+mine.length+"</td><td>"+ok+"</td><td>"+
+   (mine.length?(ok/mine.length*100).toFixed(0)+"%":"—")+"</td><td><div class='pi'>"+chips+"</div></td></tr>";
+ }).join("");
+
+ if($("demoFlag"))$("demoFlag").classList.toggle("show",IS_SAMPLE);
+ $("rCountsNote").textContent += "";
+ renderRMetrics();drawRCharts();renderResearchExplanations();renderHumanVsAI();renderCoverage();renderLimits();
+ return s;
+}
+function plural(n,s,p){return n===1?s:p}
+
+function toCSV(head,rows){
+ const esc2=v=>{const s=String(v==null?"":v);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+ return [head.join(",")].concat(rows.map(r=>r.map(esc2).join(","))).join("\n");
+}
+function download(name,text){
+ const blob=new Blob([text],{type:"text/csv"});
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);a.download=name;
+ document.body.appendChild(a);a.click();
+ document.body.removeChild(a);
+ setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+ $("exportStatus").textContent="Downloaded "+name+".";
+}
+
+function wireResearch(){
+ const dz=$("dropzone"),fi=$("fileInput"),ta=$("csvText");
+ if(!dz)return;
+ dz.onclick=()=>fi.click();
+ dz.ondragover=e=>{e.preventDefault();dz.classList.add("over")};
+ dz.ondragleave=()=>dz.classList.remove("over");
+ dz.ondrop=e=>{e.preventDefault();dz.classList.remove("over");
+  const f=e.dataTransfer.files[0];if(f)readFile(f)};
+ fi.onchange=()=>{if(fi.files[0])readFile(fi.files[0])};
+ function readFile(f){const r=new FileReader();r.onload=()=>{ta.value=r.result;loadRows(r.result,f.name)};r.readAsText(f)}
+ $("loadCsv").onclick=()=>{const v=ta.value.trim();if(!v){$("csvStatus").textContent="Paste some rows or drop a file first.";return}loadRows(v,"pasted rows")};
+ $("loadSample").onclick=()=>{ta.value=SAMPLE_CSV;loadRows(SAMPLE_CSV,"the example dataset")};
+ $("loadSampleAI").onclick=()=>{const t=SAMPLE_CSV.split("\n").filter((l,i)=>i===0||/,ai,/.test(l)).join("\n");ta.value=t;loadRows(t,"the example dataset (AI rows only)")};
+ $("clearData").onclick=()=>{ta.value="";ROWS=[];RVALID=false;IS_SAMPLE=false;
+  if($("demoFlag"))$("demoFlag").classList.remove("show");
+  $("validation").innerHTML='<p class="small">No data loaded. Load the example to see how the page behaves.</p>';
+  $("csvStatus").textContent="";$("validation").className="";renderResearch()};
+
+ $("exportSummary").onclick=()=>{
+  const s=rStats();if(!s)return $("exportStatus").textContent="Load data first.";
+  download("summary-by-source.csv",toCSV(
+   ["source","answers","correct","accuracy_percent"],
+   [["human",s.humans.length,s.humanCorrect,s.humanAcc===null?"":s.humanAcc.toFixed(1)],
+    ["ai",s.ai.length,s.aiCorrect,s.aiAcc===null?"":s.aiAcc.toFixed(1)]].filter(r=>r[0]==="ai"||s.humans.length)));
+ };
+ $("exportCategory").onclick=()=>{
+  const s=rStats();if(!s)return $("exportStatus").textContent="Load data first.";
+  const rows=Object.entries(s.cats).map(([cat,rs])=>{
+   const h=rs.filter(r=>r.source==="human"),a=rs.filter(r=>r.source==="ai");
+   const hh=h.length?h.filter(r=>r.correct===1).length/h.length*100:null;
+   const aa=a.length?a.filter(r=>r.correct===1).length/a.length*100:null;
+   return [cat,h.length,h.filter(r=>r.correct===1).length,hh===null?"":hh.toFixed(1),
+    a.length,a.filter(r=>r.correct===1).length,aa===null?"":aa.toFixed(1)];
+  });
+  const RH=s.humans.length>0;
+  download("by-category.csv",RH
+   ? toCSV(["category","human_answers","human_correct","human_accuracy_percent","ai_problems","ai_correct","ai_accuracy_percent"],rows)
+   : toCSV(["category","ai_problems","ai_correct","ai_accuracy_percent"],rows.map(r=>[r[0],r[4],r[5],r[6]])));
+ };
+ $("exportProblem").onclick=()=>{
+  const s=rStats();if(!s)return $("exportStatus").textContent="Load data first.";
+  const rows=s.problems.map(p=>{
+   const h=s.humans.filter(r=>r.problem===p),a=s.ai.filter(r=>r.problem===p);
+   const hc=h.filter(r=>r.correct===1).length;
+   return [p,(ROWS.find(r=>r.problem===p&&r.category)||{}).category||"",
+    a.length?(a[0].correct===1?"correct":"incorrect"):"",
+    h.length,hc,h.length?(hc/h.length*100).toFixed(1):""];
+  });
+  const RH=s.humans.length>0;
+  download("by-problem.csv",RH
+   ? toCSV(["problem","category","ai_result","human_answers","human_correct","human_accuracy_percent"],rows)
+   : toCSV(["problem","category","ai_result"],rows.map(r=>r.slice(0,3))));
+ };
+ $("exportParticipant").onclick=()=>{
+  const s=rStats();if(!s)return $("exportStatus").textContent="Load data first.";
+  if(!s.humans.length)return $("exportStatus").textContent="There are no participants in AI-only data.";
+  const rows=s.parts.map(p=>{
+   const mine=s.humans.filter(r=>r.participant===p);
+   const ok=mine.filter(r=>r.correct===1).length;
+   const per=s.problems.map(pr=>{const r=mine.find(x=>x.problem===pr);
+    return pr+":"+(r?r.correct:"");});
+   return [p,mine.length,ok,mine.length?(ok/mine.length*100).toFixed(1):"",per.join(" ")];
+  });
+  download("by-participant.csv",toCSV(
+   ["participant","answered","correct","accuracy_percent","per_problem"],rows));
+ };
+ $("exportRaw").onclick=()=>{
+  if(!ROWS.length)return $("exportStatus").textContent="Load data first.";
+  download("clean-dataset.csv",toCSV(
+   ["participant","problem","category","source","correct"],
+   ROWS.map(r=>[r.participant,r.problem,r.category,r.source,r.correct])));
+ };
+}
+
+function loadFlip(){const p=presets.flip;applyData(p.a,p.p,p.h);$("preset").value="flip";switchTab("compare")}
+$("tryFlip").onclick=loadFlip;$("tryFlip2").onclick=loadFlip;
+function init(){
+ let adv=false; try{adv=localStorage.getItem("mathBiasMode")==="advanced"}catch(e){}
+ setMode(adv,false);
+ render();renderCompare();renderExperiment();renderChallenge();renderGuide();
+ renderTolerance();renderSummary();wireResearch();
+ $("validation").innerHTML='<p class="small">No data loaded. Load the example to see how the page behaves.</p>';
+}
+init();
+</script>
+</body>
+</html>
