@@ -1,4 +1,3 @@
-
 // Live "You vs AI" results for the Is Math Biased? site.
 // Runs on Cloudflare Pages Functions with a D1 database bound as DB.
 // Stores only anonymous answer marks: no names, no IP addresses, no device info.
