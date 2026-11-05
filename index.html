@@ -197,6 +197,66 @@ body.raionly .rhu{display:none!important}
 body:not(.raionly) .rai-only{display:none!important}
 .cmp-empty{text-align:center;padding:40px 20px}
 .cmp-empty p{max-width:520px;margin:8px auto 16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+#qzStage{display:grid;gap:16px}
+#qzStage>.card{max-width:1000px;width:100%;margin:0 auto}
+.qz-card{max-width:760px;width:100%;margin:0 auto}
+.qz-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.qz-mode{display:flex;flex-direction:column;gap:3px;text-align:left;border:2px solid var(--line);background:var(--panel);
+  border-radius:14px;padding:16px;color:var(--ink)}
+.qz-mode strong{font-size:18px;color:var(--accent)}
+.qz-mode:hover{border-color:var(--accent);background:var(--soft)}
+.qz-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.qz-prog{height:6px;background:var(--line);border-radius:6px;margin:12px 0 18px;overflow:hidden}
+.qz-prog i{display:block;height:100%;background:var(--accent);transition:width .25s}
+.qz-q{font-size:20px;line-height:1.4;font-weight:650;margin:0 0 18px}
+.qz-input{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:12px;padding:6px 12px;background:var(--panel)}
+.qz-input:focus-within{border-color:var(--accent)}
+.qz-input input{border:0;outline:0;flex:1;min-width:0;font-size:20px;padding:8px 0;background:transparent;color:var(--ink)}
+.qz-input .affix{color:var(--muted);font-weight:650}
+.qz-choices{display:grid;gap:10px}
+.qz-choices.days{grid-template-columns:repeat(2,minmax(0,1fr))}
+.qz-choice{border:2px solid var(--line);background:var(--panel);border-radius:12px;padding:13px 14px;text-align:left;font-size:16px;color:var(--ink)}
+.qz-choice.on{border-color:var(--accent);background:var(--soft);font-weight:650}
+.qz-nav{margin-top:18px}
+.qz-nav .btn{padding:12px}
+.qz-head{text-align:center}
+.qz-big{font-size:56px;font-weight:800;color:var(--accent);line-height:1.1;margin-top:8px}
+.qz-big small{font-size:24px;color:var(--muted)}
+.qz-bars{display:grid;gap:8px;margin-top:10px}
+.qz-bar{display:grid;grid-template-columns:120px 1fr 52px;gap:10px;align-items:center;font-size:14px}
+.qz-bar .tr{height:16px;background:var(--line);border-radius:8px;overflow:hidden}
+.qz-bar .tr i{display:block;height:100%;background:var(--accent)}
+.qz-bar.you .tr i{background:var(--human)}
+.qz-bar.you .nm{font-weight:750;color:var(--human)}
+.qz-bar .v{text-align:right;font-weight:650}
+.qz-t{font-size:13px}
+.qz-t td,.qz-t th{white-space:nowrap}
+.qz-t tr.you td,.qz-t td.youc{background:var(--humansoft)}
+.qz-t tr.avg td{color:var(--muted);font-style:italic}
+.qz-t td.best{font-weight:800;color:var(--accent)}
+.qz-t td.ok{color:var(--green)}.qz-t td.near{color:#a46a00}.qz-t td.bad{color:var(--red)}
+.qz-qs td.qcell{white-space:normal;min-width:260px;max-width:420px}
+.qz-qs summary{cursor:pointer}
+.qz-qs .why{margin:6px 0 0;color:var(--muted)}
+.w-you{color:var(--human);font-weight:700}.w-ai{color:var(--accent);font-weight:700}
+.qz-how{margin-top:12px;font-size:13px}.qz-how summary{cursor:pointer;font-weight:650}
+.qz-sample{max-width:1000px;margin:0 auto 16px;background:#fdecee;border:2px solid var(--red);color:#7d1f27;border-radius:12px;padding:10px 14px;font-size:14px}
+.hero .cta{background:var(--human);border-color:var(--human)}
+@media(max-width:600px){.qz-modes{grid-template-columns:1fr}.qz-bar{grid-template-columns:90px 1fr 46px}.qz-q{font-size:18px}.qz-big{font-size:46px}}
+.qz-consent{border:2px solid var(--accent)}
+.qz-live-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qz-dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px #16845b22}
+.qz-pctl{font-size:16px;margin:10px 0 0}
+.qz-vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.qz-vs>div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column}
+.qz-vs strong{font-size:30px;line-height:1.2}
+.qz-hist{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:4px;align-items:end;height:130px}
+.qz-hist .col{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+.qz-hist i{display:block;width:100%;background:#cfcaf6;border-radius:4px 4px 0 0;min-height:2px}
+.qz-hist .col.mine i{background:var(--human)}
+.qz-hist .ct{font-size:11px;color:var(--muted);height:16px}
+.qz-hist .lb{font-size:10px;color:var(--muted);margin-top:3px}
 :focus-visible{outline:3px solid #9d93f0;outline-offset:2px}
 @media(max-width:900px){
  .span8,.span7,.span6,.span5,.span4{grid-column:span 12}
@@ -224,6 +284,7 @@ body:not(.raionly) .rai-only{display:none!important}
   </div>
   <nav aria-label="Main navigation">
     <button class="active" data-tab="start">Start here</button>
+    <button data-tab="quiz">You vs AI</button>
     <button data-tab="analyser">Analyser</button>
     <button data-tab="compare">Compare</button>
     <button data-tab="experiments">Experiments</button>
@@ -240,9 +301,9 @@ body:not(.raionly) .rai-only{display:none!important}
     <p>People say an AI is "more accurate" than humans as if accuracy were one number. It isn't: every error formula
     notices some mistakes and ignores others. This site lets you test whether the <strong>choice of formula</strong>
     can change who looks like the winner.</p>
-    <div class="row" style="margin-top:14px;max-width:560px">
+    <div class="row" style="margin-top:14px;max-width:640px">
+      <button class="btn primary cta" data-goto="quiz">Take the You vs AI challenge</button>
       <button class="btn primary" id="tryFlip">Try it: same data, different winner</button>
-      <button class="btn" data-goto="analyser">Open the Analyser</button>
     </div>
   </div>
 
@@ -299,6 +360,7 @@ body:not(.raionly) .rai-only{display:none!important}
     <div class="card span6">
       <h3>How to explore this site</h3>
       <ol class="steps">
+        <li><strong>You vs AI</strong> &mdash; answer the same math questions as 5 AI models and compare.</li>
         <li><strong>Analyser</strong> &mdash; drag a point and watch every measure change.</li>
         <li><strong>Compare</strong> &mdash; the same measures for the AI and for humans, side by side.</li>
         <li><strong>Experiments</strong> &mdash; start with <em>Pick the Winner</em> and the <em>Fairness Lab</em>.</li>
@@ -313,19 +375,24 @@ body:not(.raionly) .rai-only{display:none!important}
       <!-- EDIT THIS PARAGRAPH so it states exactly what your group did and which AI tools you used. -->
       <p>We used AI assistants, including Claude by Anthropic, to help write and debug the website's code and to draft
       parts of the explanations. Our group chose the Big Question, decided which formulas to include, designed the
-      experiments, tested the site, and checked the calculations ourselves. The example numbers on this site are invented
-      for teaching and are not real AI results.</p>
+      experiments, tested the site, and checked the calculations ourselves. Claude also helped draft and check the
+      You vs AI questions, so we did not include it among the AI models tested. The example numbers in the Analyser,
+      Compare and Experiments tabs are invented for teaching. The You vs AI results are real answers from five free AI
+      models, tested on 5 Nov 2026.</p>
     </div>
 
     <div class="card span12">
       <h3>About this project</h3>
-      <!-- EDIT: replace the bracketed parts with your real names, course, section and instructor. -->
-      <p><strong>Group members:</strong> [Member 1], [Member 2], [Member 3], [Member 4]</p>
-      <p><strong>Course:</strong> MATH 10 &middot; [Section] &middot; [School]</p>
-      <p><strong>Instructor:</strong> [Instructor's name]</p>
+      <p><strong>Group members:</strong> Ca Tipawan, Stefanie Martin, Kloyd Chlouie Magtalas</p>
+      <p><strong>Instructor:</strong> Dr. Maica Krizna Gavina</p>
       <p class="small">MATH+AI Futures Project &middot; "Mathematics and AI: Shaping a Responsible and Inclusive Future"</p>
     </div>
   </div>
+</section>
+
+<section class="page" id="quiz">
+  <div id="qzSample"></div>
+  <div id="qzStage"></div>
 </section>
 
 <section class="page" id="analyser">
@@ -705,7 +772,7 @@ body:not(.raionly) .rai-only{display:none!important}
   </div>
 </section>
 </main>
-<footer>Is Math Biased? &middot; AI vs Human Error Analyser &middot; MATH+AI Futures Project &middot; Example data are invented for teaching and are not evidence of real AI performance.</footer>
+<footer>Is Math Biased? &middot; AI vs Human Error Analyser &middot; MATH+AI Futures Project &middot; Analyser and Experiments examples are invented for teaching; You vs AI results are real answers from five AI models (5 Nov 2026).</footer>
 
 
 <script>
@@ -1023,6 +1090,7 @@ function switchTab(tab){
  if(tab==="research"){renderResearch();setTimeout(()=>{drawRCharts();renderHumanVsAI()},0);}
  if(tab==="experiments")renderExperiment();
  if(tab==="guide"){renderGuide();renderChallenge();}
+ if(tab==="quiz"&&typeof qzFetchStats==="function")qzFetchStats();
 }
 function currentTab(){const p=document.querySelector(".page.active");return p?p.id:"start"}
 function setMode(adv,rerender=true){
@@ -2235,12 +2303,465 @@ function wireResearch(){
  };
 }
 
+
+/* =====================================================================
+   YOU VS AI
+   ---------------------------------------------------------------------
+   EDIT HERE when the real AI results are in:
+   - set AI_DATA_IS_SAMPLE to false
+   - one entry per model: name, version, date tested, and its answer to
+     each question id. Numbers as numbers (5, 41976, 0.5); choices as the
+     exact option text ("9.9", "Saturday", "It doesn't matter").
+     Use null for a question the model was not asked.
+   ===================================================================== */
+const AI_DATA_IS_SAMPLE = false;
+const AI_TEST_NOTE = "Each model received all 20 questions in a single fresh chat on 5 Nov 2026 (free versions). We scored the answer each model stated first, even when its explanation later corrected it.";
+const AI_MODELS = [
+ {name:"ChatGPT", version:"free", tested:"5 Nov 2026", answers:{1:5,2:70,3:750,4:10,5:41985,6:"9.9",7:3,8:31,9:19,10:6,11:40,12:47,13:46,14:"Saturday",15:100,16:11,17:11,18:"½",19:1,20:"It doesn't matter"}},
+ {name:"Copilot", version:"free", tested:"5 Nov 2026", answers:{1:5,2:70,3:750,4:10,5:41976,6:"9.9",7:4,8:31,9:19,10:6,11:40,12:47,13:46,14:"Saturday",15:100,16:11,17:11,18:"½",19:1,20:"It doesn't matter"}},
+ {name:"Perplexity", version:"free", tested:"5 Nov 2026", answers:{1:5,2:70,3:750,4:10,5:-41976,6:"9.9",7:4,8:1,9:19,10:6,11:40,12:47,13:46,14:"Saturday",15:100,16:11,17:11,18:"½",19:1,20:"It doesn't matter"}},
+ {name:"Gemini", version:"free", tested:"5 Nov 2026", answers:{1:5,2:70,3:750,4:10,5:41976,6:"9.9",7:4,8:31,9:19,10:6,11:40,12:47,13:46,14:"Saturday",15:100,16:11,17:11,18:"½",19:1,20:"It doesn't matter"}},
+ {name:"Grok", version:"free; Q11–20 re-sent in the same chat", tested:"5 Nov 2026", answers:{1:5,2:70,3:750,4:10,5:-8019,6:"9.9",7:4,8:31,9:19,10:6,11:40,12:47,13:46,14:"Saturday",15:100,16:11,17:11,18:"½",19:1,20:"It doesn't matter"}}
+];
+
+const QUIZ_CATS=["Arithmetic","Number Sense and Counting","Rates, Patterns and Time","Logic and Probability"];
+const DAYS=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const QUIZ=[
+ {id:1,cat:0,trap:"human",type:"num",pre:"₱",post:"",ans:5,
+  q:"A notebook and a pen cost ₱110 in total. The notebook costs ₱100 more than the pen. How much does the pen cost?",
+  why:"Pen = ₱5 and notebook = ₱105: they differ by ₱100 and add to ₱110. The quick answer ₱10 would make the notebook ₱110 and the total ₱120."},
+ {id:2,cat:0,trap:"human",type:"num",pre:"",post:"",ans:70,
+  q:"Divide 30 by ½, then add 10. What do you get?",
+  why:"Dividing by ½ is the same as multiplying by 2: 30 × 2 = 60, then 60 + 10 = 70."},
+ {id:3,cat:0,trap:"human",type:"num",pre:"₱",post:"",ans:750,
+  q:"A bag costs ₱1,000. Its price goes up by 50%, then the new price goes down by 50%. What is the final price?",
+  why:"₱1,000 + 50% = ₱1,500. Then 50% off ₱1,500 is ₱750. The second percentage is taken from a bigger number."},
+ {id:4,cat:0,trap:"ai",type:"num",pre:"₱",post:"",ans:10,
+  q:"A notebook and a pen cost ₱110 in total. The notebook costs ₱100. How much does the pen cost?",
+  why:"No trick this time: ₱110 − ₱100 = ₱10. It looks like the famous puzzle, so a system that matches patterns may answer ₱5."},
+ {id:5,cat:0,trap:"ai",type:"num",pre:"",post:"",ans:41976,
+  q:"Write 12345 backwards, then subtract the original number. What do you get?",
+  why:"Backwards it is 54,321, and 54,321 − 12,345 = 41,976."},
+ {id:6,cat:1,trap:"ai",type:"choice",opts:["9.11","9.9","They're equal"],ans:"9.9",
+  q:"Which is larger: 9.11 or 9.9?",
+  why:"Compare 9.90 with 9.11: 90 hundredths beat 11 hundredths. Reading “11 > 9” like a version number gives the wrong answer."},
+ {id:7,cat:1,trap:"ai",type:"num",pre:"",post:"",ans:4,
+  q:"How many times does the letter “e” appear in the word seventeen?",
+  why:"s-E-v-E-n-t-E-E-n: four. Many AI systems read words in chunks, not letters, which makes counting letters harder."},
+ {id:8,cat:1,trap:"ai",type:"num",pre:"",post:"",ans:31,
+  q:"Find the sum of the digits of 2²⁰.",
+  why:"2²⁰ = 1,048,576, and 1 + 0 + 4 + 8 + 5 + 7 + 6 = 31."},
+ {id:9,cat:1,trap:"human",type:"num",pre:"",post:"",ans:19,
+  q:"How many whole numbers from 1 to 100 contain the digit 9?",
+  why:"9, 19, 29 … 89 is 9 numbers, plus 90–99 is 10 more: 19. The number 99 counts once."},
+ {id:10,cat:1,trap:"human",type:"num",pre:"",post:"",ans:6,
+  q:"How many whole numbers are there between 3 and 10, not counting 3 and 10?",
+  why:"4, 5, 6, 7, 8, 9: six. 10 − 3 = 7 counts the gaps, not the numbers in between."},
+ {id:11,cat:2,trap:"human",type:"num",pre:"",post:"km/h",ans:40,
+  q:"You ride 60 km to a town at 30 km/h, then ride back the same 60 km at 60 km/h. What is your average speed for the whole trip?",
+  why:"Going takes 2 hours, returning takes 1 hour: 120 km ÷ 3 hours = 40 km/h. Averaging the speeds (45) ignores that you spend longer at the slow speed."},
+ {id:12,cat:2,trap:"human",type:"num",pre:"Day",post:"",ans:47,
+  q:"A patch of water lilies doubles in size every day. It covers the whole pond on day 48. On what day did it cover half the pond?",
+  why:"It doubles every day, so the day before full it was half: day 47, not day 24."},
+ {id:13,cat:2,trap:"ai",type:"num",pre:"Day",post:"",ans:46,
+  q:"A patch of water lilies doubles in size every day. It covers the whole pond on day 48. On what day did it cover one-quarter of the pond?",
+  why:"Quarter → half → full takes two doublings, so day 46. A system that recognises the famous version may answer 47."},
+ {id:14,cat:2,trap:"ai",type:"choice",opts:DAYS,ans:"Saturday",
+  q:"Today is Thursday. What day of the week will it be 100 days from today?",
+  why:"100 = 14 weeks + 2 days. Thursday + 2 days = Saturday."},
+ {id:15,cat:2,trap:"ai",type:"num",pre:"",post:"minutes",ans:100,
+  q:"5 machines make 5 phone cases in 5 minutes. How long would 5 machines take to make 100 phone cases?",
+  why:"Each machine makes 1 case in 5 minutes, so 5 machines make 5 cases every 5 minutes. 100 cases = 20 rounds × 5 minutes = 100 minutes."},
+ {id:16,cat:3,trap:"human",type:"num",pre:"",post:"posts",ans:11,
+  q:"You build a straight fence 100 meters long and put a post every 10 meters, including both ends. How many posts do you need?",
+  why:"100 ÷ 10 = 10 gaps, and 10 gaps need 11 posts."},
+ {id:17,cat:3,trap:"human",type:"num",pre:"",post:"seconds",ans:11,
+  q:"A clock strikes 6 times at 6 o'clock, and it takes 5 seconds from the first strike to the last. How long does it take to strike 12 times at 12 o'clock?",
+  why:"6 strikes have 5 gaps, so each gap is 1 second. 12 strikes have 11 gaps: 11 seconds, not 10."},
+ {id:18,cat:3,trap:"human",type:"choice",opts:["½","Less than ½","More than ½","1/32"],ans:"½",
+  q:"A fair coin lands on heads 5 times in a row. What is the probability that the next flip is heads?",
+  why:"A coin has no memory. Each flip is ½ no matter what came before. 1/32 is the chance of the whole streak, which has already happened."},
+ {id:19,cat:3,trap:"ai",type:"num",pre:"",post:"crossings",ans:1,
+  q:"A farmer and one sheep need to cross a river. The boat can carry the farmer and one animal. What is the fewest number of crossings needed to get both to the other side?",
+  why:"Both fit in the boat, so one crossing. It looks like the wolf–goat–cabbage puzzle, which can tempt a system into a long, unnecessary plan."},
+ {id:20,cat:3,trap:"ai",type:"choice",opts:["Switch to Door 2","Stay with Door 1","It doesn't matter"],ans:"It doesn't matter",
+  q:"You're on a game show with 3 doors. A car is behind one door and goats are behind the other two. You pick Door 1. The host doesn't know where the car is. He opens one of the other two doors at random, Door 3, and it happens to show a goat. Should you switch to Door 2, stay, or does it not matter?",
+  why:"The host chose at random, so his reveal gives no extra information: both doors are 50/50. In the classic puzzle the host knows where the car is and always shows a goat, which is why switching wins there."}
+];
+const QUIZ_BY_ID=Object.fromEntries(QUIZ.map(q=>[q.id,q]));
+// Full mode: categories take turns, and each "twin" pair (1 & 4, 12 & 13) sits far apart.
+const QUIZ_FULL_ORDER=[1,6,12,16,2,7,11,17,3,8,14,18,5,9,15,19,4,10,13,20];
+const QUIZ_TWINS=[[1,4],[12,13]];
+
+let QZ={mode:null,ids:[],i:0,answers:{}};
+
+function qzParseNum(v){
+ if(v===null||v===undefined)return null;
+ if(typeof v==="number")return Number.isFinite(v)?v:null;
+ let s=String(v).trim().toLowerCase();
+ if(!s)return null;
+ s=s.replace(/½/g,"1/2").replace(/[₱,\s]/g,"").replace(/^day/,"")
+    .replace(/(km\/h|kph|kmh|minutes|minute|mins|min|seconds|second|secs|sec|s|days|day|posts|post|crossings|crossing|pesos|peso|php|p)$/,"");
+ if(/^-?\d+(\.\d+)?\/\d+(\.\d+)?$/.test(s)){const [a,b]=s.split("/").map(Number);return b?a/b:null}
+ const n=Number(s);
+ return Number.isFinite(n)?n:null;
+}
+// Grades one answer. "close" = within 10% of the correct number (choice questions: only exactly right counts).
+// "miss" = how far off, as a % of the correct answer, capped at 100% so one wild guess cannot swamp the average.
+function qzGrade(q,given){
+ const blank=(given===null||given===undefined||String(given).trim()==="");
+ if(q.type==="choice"){
+  const ok=!blank&&String(given)===q.ans;
+  return {exact:ok,close:ok,miss:null,blank,shown:blank?"(no answer)":String(given)};
+ }
+ const v=blank?null:qzParseNum(given);
+ if(v===null) return {exact:false,close:false,miss:100,blank,shown:blank?"(no answer)":String(given)};
+ const d=Math.abs(v-q.ans);
+ return {exact:d<1e-9,close:d<=Math.abs(q.ans)*0.10+1e-9,miss:Math.min(100,d/Math.abs(q.ans)*100),blank:false,
+  shown:(q.pre==="Day"?"Day ":q.pre)+fmtQ(v)+(q.post?" "+q.post:"")};
+}
+function fmtQ(v){return Number.isInteger(v)?v.toLocaleString("en-US"):String(Math.round(v*1000)/1000)}
+function qzAnsText(q){return q.type==="choice"?q.ans:(q.pre==="Day"?"Day ":q.pre)+fmtQ(q.ans)+(q.post?" "+q.post:"")}
+function qzModelsReady(){return AI_MODELS.filter(m=>QUIZ.every(q=>m.answers[q.id]!==null&&m.answers[q.id]!==undefined))}
+function qzScore(answerOf,ids){
+ let exact=0,close=0,misses=[];
+ const per=ids.map(id=>{const q=QUIZ_BY_ID[id],g=qzGrade(q,answerOf(id));if(g.exact)exact++;if(g.close)close++;if(g.miss!==null)misses.push(g.miss);return g});
+ return {exact,close,avgMiss:misses.length?misses.reduce((a,b)=>a+b,0)/misses.length:null,per,n:ids.length};
+}
+function qzShuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function qzQuickIds(){
+ for(let tries=0;tries<200;tries++){
+  const ids=[];
+  QUIZ_CATS.forEach((_,c)=>{
+   const h=QUIZ.filter(q=>q.cat===c&&q.trap==="human"), a=QUIZ.filter(q=>q.cat===c&&q.trap==="ai");
+   ids.push(h[Math.floor(Math.random()*h.length)].id, a[Math.floor(Math.random()*a.length)].id);
+  });
+  if(QUIZ_TWINS.some(([x,y])=>ids.includes(x)&&ids.includes(y)))continue;
+  const hs=qzShuffle(ids.filter(id=>QUIZ_BY_ID[id].trap==="human")), as=qzShuffle(ids.filter(id=>QUIZ_BY_ID[id].trap==="ai"));
+  return hs.flatMap((h,i)=>[h,as[i]]);
+ }
+ return [2,6,11,15,3,8,17,20];
+}
+function qzEsc(s){return esc(String(s))}
+function ordinal(n){const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])}
+
+function qzIntro(){
+ QZ={mode:null,ids:[],i:0,answers:{}};
+ const ready=qzModelsReady();
+ const names=ready.map(m=>m.name+(m.version?" ("+m.version+")":"")).join(", ");
+ $("qzStage").innerHTML=
+  `<div class="card qz-card">
+    <span class="tag">YOU VS AI</span>
+    <h2 style="margin-top:12px">Can you beat the AI at math?</h2>
+    <p>Answer the same questions we gave to ${ready.length} AI model${ready.length===1?"":"s"}. At the end, see how you compare: overall, by category, and scored three different ways.</p>
+    <p class="small">No calculator and no AI, just you. Nothing is shared unless you choose to at the end, and even then only your marks, never your name.</p>
+    <div class="qz-modes">
+     <button class="qz-mode" data-mode="quick"><strong>Quick</strong><span>8 questions &middot; about 3 minutes</span><span class="small">2 from each category</span></button>
+     <button class="qz-mode" data-mode="full"><strong>Full</strong><span>20 questions &middot; about 8 minutes</span><span class="small">every question, for a full category comparison</span></button>
+    </div>
+    <p class="small" style="margin-top:14px"><strong>AI models:</strong> ${qzEsc(names||"none added yet")}${AI_TEST_NOTE?"<br>"+qzEsc(AI_TEST_NOTE):""}</p>
+    <button class="btn" id="qzShowBoard" style="margin-top:6px">See the AI results without playing</button>
+   </div><div class="card" id="qzLive"></div>`;
+ $("qzStage").querySelectorAll(".qz-mode").forEach(b=>b.onclick=()=>qzStart(b.dataset.mode));
+ $("qzShowBoard").onclick=qzBoardOnly;
+ qzRenderLive();
+}
+function qzStart(mode){
+ QZ={mode,ids:mode==="full"?[...QUIZ_FULL_ORDER]:qzQuickIds(),i:0,answers:{}};
+ qzQuestion();
+}
+function qzQuestion(){
+ const id=QZ.ids[QZ.i], q=QUIZ_BY_ID[id], n=QZ.ids.length, prev=QZ.answers[id];
+ let input;
+ if(q.type==="choice"){
+  input=`<div class="qz-choices${q.opts.length>4?" days":""}" role="radiogroup" aria-label="Answer choices">`+
+   q.opts.map(o=>`<button class="qz-choice${prev===o?" on":""}" role="radio" aria-checked="${prev===o}" data-v="${qzEsc(o)}">${qzEsc(o)}</button>`).join("")+`</div>`;
+ } else {
+  input=`<label class="qz-input"><span class="sr">Your answer</span>${q.pre?`<span class="affix">${qzEsc(q.pre)}</span>`:""}
+   <input id="qzAns" type="text" inputmode="decimal" autocomplete="off" placeholder="Your answer" value="${prev?qzEsc(prev):""}">
+   ${q.post?`<span class="affix">${qzEsc(q.post)}</span>`:""}</label>`;
+ }
+ $("qzStage").innerHTML=
+  `<div class="card qz-card">
+    <div class="qz-top"><span class="tag">${qzEsc(QUIZ_CATS[q.cat].toUpperCase())}</span><span class="small">Question ${QZ.i+1} of ${n}</span></div>
+    <div class="qz-prog"><i style="width:${(QZ.i)/n*100}%"></i></div>
+    <h2 class="qz-q">${qzEsc(q.q)}</h2>
+    ${input}
+    <div class="row qz-nav">
+     <button class="btn" id="qzBack" ${QZ.i===0?"disabled":""}>Back</button>
+     <button class="btn" id="qzSkip">Skip</button>
+     <button class="btn primary" id="qzNext">${QZ.i===n-1?"See my results":"Next"}</button>
+    </div>
+    <button class="linkish small" id="qzQuit" style="margin-top:12px">Quit and start over</button>
+   </div>`;
+ const save=()=>{if(q.type!=="choice")QZ.answers[id]=$("qzAns").value};
+ if(q.type==="choice"){
+  $("qzStage").querySelectorAll(".qz-choice").forEach(b=>b.onclick=()=>{
+   QZ.answers[id]=b.dataset.v;
+   $("qzStage").querySelectorAll(".qz-choice").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-checked",String(x===b))});
+  });
+ } else {
+  const inp=$("qzAns"); setTimeout(()=>inp.focus(),0);
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();$("qzNext").click()}});
+ }
+ $("qzNext").onclick=()=>{save();qzGo(1)};
+ $("qzSkip").onclick=()=>{QZ.answers[id]="";qzGo(1)};
+ $("qzBack").onclick=()=>{save();qzGo(-1)};
+ $("qzQuit").onclick=qzIntro;
+}
+function qzGo(d){
+ QZ.i+=d;
+ if(QZ.i>=QZ.ids.length){qzResults();return}
+ if(QZ.i<0)QZ.i=0;
+ qzQuestion();
+ window.scrollTo({top:$("quiz").offsetTop-10,behavior:"smooth"});
+}
+
+// players: [{name, answerOf(id), you?}]
+function qzPlayers(withYou){
+ const ps=qzModelsReady().map(m=>({name:m.name,answerOf:id=>m.answers[id]}));
+ if(withYou)ps.unshift({name:"You",you:true,answerOf:id=>QZ.answers[id]});
+ return ps;
+}
+function qzBoard(ids,withYou){
+ const players=qzPlayers(withYou), n=ids.length;
+ const scored=players.map(p=>({...p,s:qzScore(p.answerOf,ids)}));
+ const ais=scored.filter(p=>!p.you);
+ const avg=f=>ais.length?ais.reduce((a,p)=>a+f(p),0)/ais.length:null;
+ const numCount=ids.filter(id=>QUIZ_BY_ID[id].type==="num").length;
+ let html="";
+
+ // ---- headline
+ if(withYou){
+  const you=scored[0].s, best=ais.length?Math.max(...ais.map(p=>p.s.exact)):null;
+  const beat=ais.filter(p=>you.exact>p.s.exact).length, tie=ais.filter(p=>you.exact===p.s.exact).length;
+  html+=`<div class="card qz-card qz-head">
+   <span class="tag">YOUR RESULT &middot; ${QZ.mode==="full"?"FULL":"QUICK"} MODE</span>
+   <div class="qz-big">${you.exact}<small>/${n}</small></div>
+   <p style="margin:0">exactly right. ${ais.length?`You beat <strong>${beat}</strong> of ${ais.length} AI models${tie?` and tied with ${tie}`:""}. The best AI got ${best}/${n}.`:""}</p>
+  </div>`;
+ }
+
+ // ---- overall bars
+ const maxE=Math.max(n,1);
+ html+=`<div class="card"><h3>Exactly right</h3><div class="qz-bars">`+
+  scored.map(p=>`<div class="qz-bar${p.you?" you":""}"><span class="nm">${qzEsc(p.name)}</span><span class="tr"><i style="width:${p.s.exact/maxE*100}%"></i></span><span class="v">${p.s.exact}/${n}</span></div>`).join("")+
+  `</div></div>`;
+
+ // ---- three ways to score
+ const rank=(key,higher)=>{const you=scored[0].s[key];return 1+scored.slice(1).filter(p=>higher?p.s[key]>you:(p.s[key]!==null&&you!==null&&p.s[key]<you)).length};
+ const tied=(key)=>scored.slice(1).some(p=>p.s[key]!==null&&scored[0].s[key]!==null&&Math.abs(p.s[key]-scored[0].s[key])<1e-9);
+ const place=(r,key)=>(tied(key)?"joint ":"")+ordinal(r);
+ const best=(key,higher)=>{const vals=scored.map(p=>p.s[key]).filter(v=>v!==null);return higher?Math.max(...vals):Math.min(...vals)};
+ const bE=best("exact",true),bC=best("close",true),bM=numCount?best("avgMiss",false):null;
+ html+=`<div class="card"><h3>Three ways to score the same answers</h3>
+  <p class="sub">Each column is a different formula. Watch whether the order changes.</p>
+  <div class="table-wrap"><table class="qz-t"><thead><tr><th></th><th>Exactly right</th><th>Close enough<br><span class="small">within 10%</span></th><th>Average miss<br><span class="small">lower is better</span></th></tr></thead><tbody>`+
+  scored.map(p=>`<tr class="${p.you?"you":""}"><td>${qzEsc(p.name)}</td>
+    <td class="${p.s.exact===bE?"best":""}">${p.s.exact}/${n}</td>
+    <td class="${p.s.close===bC?"best":""}">${p.s.close}/${n}</td>
+    <td class="${p.s.avgMiss!==null&&Math.abs(p.s.avgMiss-bM)<1e-9?"best":""}">${p.s.avgMiss===null?"—":p.s.avgMiss.toFixed(1)+"%"}</td></tr>`).join("")+
+  (ais.length>1?`<tr class="avg"><td>AI average</td><td>${avg(p=>p.s.exact).toFixed(1)}/${n}</td><td>${avg(p=>p.s.close).toFixed(1)}/${n}</td><td>${numCount?avg(p=>p.s.avgMiss).toFixed(1)+"%":"—"}</td></tr>`:"")+
+  `</tbody></table></div>`;
+ if(withYou&&ais.length){
+  const r1=rank("exact",true),r2=rank("close",true),r3=numCount?rank("avgMiss",false):null, tot=scored.length;
+  const same=(r1===r2&&(r3===null||r3===r1));
+  html+=`<div class="notice ${same?"":"good"}">`+(same
+   ? `You placed <strong>${place(r1,"exact")} of ${tot}</strong> by exactly right${r3!==null?", and the same place by the other two methods":""}.`
+   : `<strong>Your place changes with the formula:</strong> ${place(r1,"exact")} of ${tot} by exactly right, ${place(r2,"close")} by close enough${r3!==null?", "+place(r3,"avgMiss")+" by average miss":""}. Same answers, different verdict. That is our Big Question.`)+`</div>`;
+ }
+ html+=`<details class="qz-how"><summary>How each score is calculated</summary>
+  <p><strong>Exactly right:</strong> the answer matches the correct answer exactly.</p>
+  <p><strong>Close enough:</strong> a number answer within 10% of the correct one also counts. Choice questions only count when exactly right.</p>
+  <p><strong>Average miss:</strong> for the ${numCount} number question${numCount===1?"":"s"}, how far off each answer was as a percentage of the correct answer, averaged. Each miss is capped at 100% and a blank counts as 100%, so one wild guess cannot swamp the average. That cap is itself a choice someone had to make.</p>
+ </details></div>`;
+
+ // ---- by category
+ const catIds=QUIZ_CATS.map((_,c)=>ids.filter(id=>QUIZ_BY_ID[id].cat===c));
+ html+=`<div class="card"><h3>By category</h3><p class="sub">Exactly right in each category.</p>
+  <div class="table-wrap"><table class="qz-t"><thead><tr><th>Category</th>`+scored.map(p=>`<th>${qzEsc(p.name)}</th>`).join("")+
+  (ais.length>1?`<th>AI average</th>`:"")+(withYou&&ais.length?`<th>You vs AI average</th>`:"")+`</tr></thead><tbody>`+
+  QUIZ_CATS.map((cat,c)=>{
+   const cid=catIds[c]; if(!cid.length)return "";
+   const sc=scored.map(p=>qzScore(p.answerOf,cid).exact), mx=Math.max(...sc);
+   const aiAvg=ais.length?sc.slice(withYou?1:0).reduce((a,b)=>a+b,0)/ais.length:null;
+   let verdict="";
+   if(withYou&&ais.length){const y=sc[0];verdict=Math.abs(y-aiAvg)<1e-9?"Tie":y>aiAvg?"<span class='w-you'>You ahead</span>":"<span class='w-ai'>AI ahead</span>"}
+   return `<tr><td>${qzEsc(cat)}</td>`+sc.map((v,i)=>`<td class="${v===mx?"best":""}${scored[i].you?" youc":""}">${v}/${cid.length}</td>`).join("")+
+    (ais.length>1?`<td>${aiAvg.toFixed(1)}/${cid.length}</td>`:"")+(verdict?`<td>${verdict}</td>`:"")+`</tr>`;
+  }).join("")+`</tbody></table></div>`+
+  (QZ.mode==="quick"&&withYou?`<p class="small">Quick mode has only 2 questions per category, so one answer swings a category a lot. Try Full mode for a fairer category comparison.</p>`:"")+
+  `</div>`;
+
+ // ---- trap type
+ html+=`<div class="card"><h3>Questions designed to trick humans vs. designed to trick AI</h3>
+  <p class="sub">Half the questions are classic human traps, half are known to trip up AI. Who wins depends on which questions you ask.</p>
+  <div class="table-wrap"><table class="qz-t"><thead><tr><th>Question type</th>`+scored.map(p=>`<th>${qzEsc(p.name)}</th>`).join("")+`</tr></thead><tbody>`+
+  [["human","Human traps"],["ai","AI traps"]].map(([t,label])=>{
+   const tid=ids.filter(id=>QUIZ_BY_ID[id].trap===t); if(!tid.length)return "";
+   const sc=scored.map(p=>qzScore(p.answerOf,tid).exact), mx=Math.max(...sc);
+   return `<tr><td>${label}</td>`+sc.map((v,i)=>`<td class="${v===mx?"best":""}${scored[i].you?" youc":""}">${v}/${tid.length}</td>`).join("")+`</tr>`;
+  }).join("")+`</tbody></table></div></div>`;
+
+ // ---- question by question
+ html+=`<div class="card"><h3>Question by question</h3><p class="sub">&#10003; exactly right &middot; &#8776; close enough &middot; &#10007; wrong. Open a question to see the working.</p>
+  <div class="table-wrap"><table class="qz-t qz-qs"><thead><tr><th>Question</th><th>Correct</th>`+scored.map(p=>`<th>${qzEsc(p.name)}</th>`).join("")+`<th>AIs right</th><th>Humans right<br><span class="small">live</span></th></tr></thead><tbody>`+
+  ids.map(id=>{
+   const q=QUIZ_BY_ID[id];
+   const gs=scored.map(p=>qzGrade(q,p.answerOf(id)));
+   const aiRight=gs.filter((g,i)=>!scored[i].you&&g.exact).length;
+   return `<tr><td class="qcell"><details><summary><span class="small">${qzEsc(QUIZ_CATS[q.cat])}</span><br>${qzEsc(q.q)}</summary><p class="why">${qzEsc(q.why)}</p></details></td>
+    <td><strong>${qzEsc(qzAnsText(q))}</strong></td>`+
+    gs.map((g,i)=>`<td class="${g.exact?"ok":g.close?"near":"bad"}${scored[i].you?" youc":""}">${g.exact?"&#10003;":g.close?"&#8776;":"&#10007;"} ${qzEsc(g.shown)}</td>`).join("")+
+    `<td>${aiRight}/${ais.length}</td><td data-hq="${id}">&hellip;</td></tr>`;
+  }).join("")+`</tbody></table></div></div>`;
+
+ // ---- caveat + actions
+ html+=`<div class="card"><p class="small" style="margin:0"><strong>Read this fairly:</strong> these are hand-picked tricky questions, and each AI answered each question once on the date tested. The results show how everyone did <em>on these questions</em>, not that AI or people are better at math in general.</p>
+  <div class="row" style="margin-top:14px">${withYou?`<button class="btn primary" id="qzAgain">Play again</button>`:`<button class="btn primary" id="qzAgain">Take the challenge</button>`}
+  <button class="btn" id="qzCsv">Download ${withYou?"my results":"the AI results"} (CSV)</button></div></div>`;
+ return html;
+}
+function qzResults(){
+ $("qzStage").innerHTML=qzBoard(QZ.ids,true);
+ LIVE.mine=false;
+ $("qzStage").querySelector(".qz-head").insertAdjacentHTML("afterend",qzConsentHTML());
+ qzWireConsent();qzRenderLive();qzFetchStats();
+ $("qzAgain").onclick=qzIntro;
+ $("qzCsv").onclick=()=>qzCsv(QZ.ids,true);
+ window.scrollTo({top:$("quiz").offsetTop-10,behavior:"smooth"});
+}
+function qzBoardOnly(){
+ QZ.mode="full";
+ $("qzStage").innerHTML=`<div class="card qz-card"><span class="tag">AI RESULTS</span><h2 style="margin-top:12px">How each AI did on all 20 questions</h2>
+  <p class="small" style="margin:0">${qzEsc(qzModelsReady().map(m=>m.name+(m.version?" ("+m.version+")":"")+(m.tested?", tested "+m.tested:"")).join(" · "))}</p></div><div class="card" id="qzLive"></div>`+qzBoard(QUIZ.map(q=>q.id),false);
+ $("qzAgain").onclick=qzIntro;
+ $("qzCsv").onclick=()=>qzCsv(QUIZ.map(q=>q.id),false);
+ qzRenderLive();
+}
+function qzCsv(ids,withYou){
+ const players=qzPlayers(withYou);
+ const head=["question_id","category","designed_to_trick","question","correct_answer"].concat(players.flatMap(p=>[p.name+"_answer",p.name+"_exact",p.name+"_within_10pct",p.name+"_pct_off"]));
+ const rows=ids.map(id=>{const q=QUIZ_BY_ID[id];
+  return [id,QUIZ_CATS[q.cat],q.trap==="ai"?"AI":"humans",q.q,qzAnsText(q)].concat(players.flatMap(p=>{const g=qzGrade(q,p.answerOf(id));return [g.blank?"":g.shown,g.exact?1:0,g.close?1:0,g.miss===null?"":(Math.round(g.miss*1000)/1000)]}))});
+ download(withYou?"you-vs-ai-results.csv":"ai-results.csv",toCSV(head,rows));
+}
+function qzSampleFlag(){
+ return AI_DATA_IS_SAMPLE?`<div class="qz-sample"><strong>SAMPLE AI DATA</strong> &mdash; the AI answers here are placeholders for testing, not real results. Replace them before publishing.</div>`:"";
+}
+function initQuiz(){
+ $("qzSample").innerHTML=qzSampleFlag();
+ qzIntro();
+ qzLiveStart();
+}
+
+/* ---------- LIVE RESULTS (shared, anonymous) ---------- */
+const LIVE={stats:null,status:"idle",timer:null,mine:false};
+function qzLiveSupported(){return location.protocol==="http:"||location.protocol==="https:"}
+async function qzFetchStats(){
+ if(!qzLiveSupported()){LIVE.status="offline";qzRenderLive();return}
+ const ctl=new AbortController(), t=setTimeout(()=>ctl.abort(),6000);
+ try{
+  const r=await fetch("api/stats",{cache:"no-store",signal:ctl.signal});
+  if(!r.ok)throw new Error("status "+r.status);
+  LIVE.stats=await r.json();LIVE.status="ok";
+ }catch(e){LIVE.status="error"}
+ finally{clearTimeout(t)}
+ qzRenderLive();
+}
+function qzLiveStart(){
+ qzFetchStats();
+ if(!LIVE.timer)LIVE.timer=setInterval(()=>{
+  if($("qzLive")&&$("quiz").classList.contains("active")&&document.visibilityState==="visible")qzFetchStats();
+ },30000);
+}
+function qzAiRates(){
+ const ms=qzModelsReady(); if(!ms.length)return null;
+ const rate=ids=>ms.reduce((s,m)=>s+qzScore(id=>m.answers[id],ids).exact/ids.length,0)/ms.length*100;
+ return {all:rate(QUIZ.map(q=>q.id)),cats:QUIZ_CATS.map((_,c)=>rate(QUIZ.filter(q=>q.cat===c).map(q=>q.id)))};
+}
+function qzMyPct(){
+ if(!QZ.ids.length||!$("qzConsent"))return null;
+ return qzScore(id=>QZ.answers[id],QZ.ids).exact/QZ.ids.length*100;
+}
+function qzRenderLive(){
+ // per-question "humans right" cells
+ document.querySelectorAll("[data-hq]").forEach(td=>{
+  const q=LIVE.status==="ok"&&LIVE.stats?(LIVE.stats.questions||[]).find(x=>Number(x.qid)===Number(td.dataset.hq)):null;
+  td.textContent=q&&q.answered?Math.round(q.correct/q.answered*100)+"% ("+q.answered+")":(LIVE.status==="ok"?"no data yet":"—");
+ });
+ const el=$("qzLive"); if(!el)return;
+ if(LIVE.status==="offline"){el.innerHTML=`<h3>Live results</h3><p class="small" style="margin:0">Live results only work on the published website, not when this file is opened from a computer.</p>`;return}
+ if(LIVE.status==="error"){el.innerHTML=`<h3>Live results</h3><p class="small" style="margin:0">Live results aren't available right now. Everything else on this page still works.</p>`;return}
+ if(LIVE.status!=="ok"||!LIVE.stats){el.innerHTML=`<h3>Live results</h3><p class="small" style="margin:0">Loading&hellip;</p>`;return}
+ const S=LIVE.stats, ai=qzAiRates(), n=S.players||0;
+ if(!n){el.innerHTML=`<h3>Live results</h3><p style="margin:0">No one has shared their answers yet. Finish the challenge and be the first.</p>`;return}
+ const hum=S.exactRate*100;
+ const my=qzMyPct();
+ let pctLine="";
+ if(my!==null&&S.distribution){
+  const me=Math.round(my), others=n-(LIVE.mine?1:0);
+  const below=S.distribution.filter(d=>d.pct<me).reduce((s,d)=>s+d.count,0);
+  const tied=S.distribution.filter(d=>d.pct===me).reduce((s,d)=>s+d.count,0)-(LIVE.mine?1:0);
+  pctLine=others<=0
+   ? `<p class="qz-pctl">You're the first to share. Check back as more people play.</p>`
+   : `<p class="qz-pctl">You did better than <strong>${Math.round(below/others*100)}%</strong> of the other ${others} ${others===1?"person":"people"} who shared${tied>0?`, and tied with ${tied}`:""}.</p>`;
+ }
+ const bins=Array(11).fill(0);
+ (S.distribution||[]).forEach(d=>{bins[Math.min(10,Math.floor(d.pct/10))]+=d.count});
+ const maxB=Math.max(...bins,1), myBin=my===null?-1:Math.min(10,Math.floor(Math.round(my)/10));
+ const cats=QUIZ_CATS.map((name,c)=>{
+  const r=(S.categories||[]).find(x=>Number(x.cat)===c);
+  const h=r&&r.answered?r.correct/r.answered*100:null, a=ai?ai.cats[c]:null;
+  const v=h===null||a===null?"—":Math.abs(h-a)<0.5?"Tie":h>a?"<span class='w-you'>Humans ahead</span>":"<span class='w-ai'>AI ahead</span>";
+  return `<tr><td>${qzEsc(name)}</td><td>${h===null?"—":h.toFixed(0)+"%"}</td><td>${a===null?"—":a.toFixed(0)+"%"}</td><td>${v}</td></tr>`;
+ }).join("");
+ const t=new Date(S.updated||Date.now());
+ el.innerHTML=`<div class="qz-live-head"><h3 style="margin:0">Live results</h3><span class="qz-dot"></span><span class="small">${n} ${n===1?"person has":"people have"} shared</span></div>
+  ${pctLine}
+  <div class="qz-vs">
+   <div><span class="small">Humans, exactly right</span><strong class="w-you">${hum.toFixed(0)}%</strong></div>
+   <div><span class="small">AI models, exactly right</span><strong class="w-ai">${ai?ai.all.toFixed(0)+"%":"—"}</strong></div>
+  </div>
+  <div class="table-wrap"><table class="qz-t"><thead><tr><th>Category</th><th>Humans</th><th>AI average</th><th></th></tr></thead><tbody>${cats}</tbody></table></div>
+  <h4 style="margin:14px 0 6px">How everyone's scores are spread</h4>
+  <div class="qz-hist" role="img" aria-label="Number of people by percentage of questions exactly right">${bins.map((b,i)=>`<div class="col${i===myBin?" mine":""}"><span class="ct">${b||""}</span><i style="height:${b/maxB*100}%"></i><span class="lb">${i*10}</span></div>`).join("")}</div>
+  <p class="small" style="margin:6px 0 0">% of questions exactly right${myBin>=0?" &middot; your score is highlighted":""}. Scores from Quick and Full mode are combined as percentages.</p>
+  <p class="small" style="margin:8px 0 0;color:var(--muted)">Updated ${t.toLocaleTimeString()} &middot; refreshes every 30 seconds &middot; only answers people chose to share</p>`;
+}
+function qzConsentHTML(){
+ return `<div class="card qz-consent" id="qzConsent">
+  <h3>Add your answers to the live results?</h3>
+  <p class="small">Only which questions you got right and how far off you were are shared. No name, no email, no device information.</p>
+  <div class="row"><button class="btn primary" id="qzShare">Share my answers</button><button class="btn" id="qzNoShare">No thanks</button></div>
+  <p class="small" id="qzShareMsg" aria-live="polite" style="margin:8px 0 0"></p>
+ </div><div class="card" id="qzLive"></div>`;
+}
+function qzWireConsent(){
+ const msg=$("qzShareMsg");
+ if(!qzLiveSupported()){$("qzShare").disabled=true;msg.textContent="Sharing only works on the published website.";}
+ $("qzNoShare").onclick=()=>{$("qzShare").disabled=true;$("qzNoShare").disabled=true;msg.textContent="Okay, nothing was shared.";};
+ $("qzShare").onclick=async()=>{
+  $("qzShare").disabled=true;$("qzNoShare").disabled=true;msg.textContent="Sharing…";
+  const answers=QZ.ids.map(id=>{const g=qzGrade(QUIZ_BY_ID[id],QZ.answers[id]);return {id,exact:g.exact?1:0,close:g.close?1:0,miss:g.miss}});
+  try{
+   const r=await fetch("api/stats",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({mode:QZ.mode,answers})});
+   if(!r.ok)throw new Error();
+   msg.textContent="Thank you! Your answers were added to the live results.";LIVE.mine=true;
+   qzFetchStats();
+  }catch(e){
+   msg.textContent="Couldn't connect, so your answers were not shared.";
+   $("qzShare").disabled=false;$("qzNoShare").disabled=false;
+  }
+ };
+}
+
 function loadFlip(){const p=presets.flip;applyData(p.a,p.p,p.h);$("preset").value="flip";switchTab("compare")}
 $("tryFlip").onclick=loadFlip;$("tryFlip2").onclick=loadFlip;
 function init(){
  let adv=false; try{adv=localStorage.getItem("mathBiasMode")==="advanced"}catch(e){}
  setMode(adv,false);
- render();renderCompare();renderExperiment();renderChallenge();renderGuide();
+ render();renderCompare();renderExperiment();renderChallenge();renderGuide();initQuiz();
  renderTolerance();renderSummary();wireResearch();
  $("validation").innerHTML='<p class="small">No data loaded. Load the example to see how the page behaves.</p>';
 }
